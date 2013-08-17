@@ -1,3 +1,10 @@
+# IDEA
+.idea
+*.iml
+
+# Maven
+target
+
 *.class
 
 # Package Files #
