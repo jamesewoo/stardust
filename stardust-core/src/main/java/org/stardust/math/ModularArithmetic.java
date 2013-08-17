@@ -10,7 +10,10 @@ package org.stardust.math;
 public class ModularArithmetic {
 
     public static boolean isCongruent(int x, int y, int n) {
-        return (x - y) % n == 0;
+        if (x >= y)
+            return (x - y) % n == 0;
+        else
+            return (y - x) % n == 0;
     }
 
     public static boolean isCoprime(int x, int y) {
@@ -46,16 +49,39 @@ public class ModularArithmetic {
         return (x * y) % q;
     }
 
-    public static int inverse(int x, int q) {
+    public static Integer inverse(int x, int q) {
         if (!isElement(x, q))
             throw new ArithmeticException("element is not in Zq");
         if (isCoprime(x, q)) {
-            return euclideanAlgorithm(x, q);
-        } else throw new ArithmeticException("x is not coprime with q");
+            return extendedGcd(x, q);
+        } else
+            return null;
     }
 
-    public static int euclideanAlgorithm(int x, int q) {
-        // TODO
-        return -1;
+    /**
+     * Returns the Bézout coefficient of <code>a</code>
+     *
+     * @param a An integer
+     * @param b An integer
+     * @return the Bézout coefficient of <code>a</code>
+     */
+    public static int extendedGcd(int a, int b) {
+        int x_2 = 1;
+        int x_1 = 0;
+        int r_2 = a;
+        int r_1 = b;
+        int r = r_2;
+        int x;
+
+        while (r != 0) {
+            int q = r_2 / r_1;
+            r = r_2 - q * r_1;
+            x = x_2 - q * x_1;
+            x_2 = x_1;
+            x_1 = x;
+            r_2 = r_1;
+            r_1 = r;
+        }
+        return x_2;
     }
 }
