@@ -1,4 +1,4 @@
 stardust
 ========
 
-A collection of ideas.
+A collection of ideas associated with elliptic curves.
