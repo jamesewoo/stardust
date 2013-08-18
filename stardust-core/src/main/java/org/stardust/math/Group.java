@@ -18,4 +18,6 @@ public interface Group<T> {
     public T getInverse(T a);
 
     public boolean isElement(T a);
+
+    public boolean hasFiniteOrder(T a);
 }
