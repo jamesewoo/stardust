@@ -9,6 +9,13 @@ package org.stardust.math;
  */
 public class ModularArithmetic {
 
+    /**
+     * Returns true if x and y are congruent modulo n.
+     * @param x An integer
+     * @param y An integer
+     * @param n An integer
+     * @return true if x and y are congruent modulo n.
+     */
     public static boolean isCongruent(int x, int y, int n) {
         if (x >= y)
             return (x - y) % n == 0;
@@ -31,7 +38,7 @@ public class ModularArithmetic {
      * Returns true if x is in Zq.
      *
      * @param x An integer
-     * @param q
+     * @param q An integer
      * @return true if x is in Zq.
      */
     public static boolean isElement(int x, int q) {
@@ -56,6 +63,12 @@ public class ModularArithmetic {
         return (x * y) % q;
     }
 
+    /**
+     * Returns the inverse of x modulo q.
+     * @param x An integer
+     * @param q An integer
+     * @return
+     */
     public static Integer inverse(int x, int q) {
         if (!isElement(x, q))
             throw new ArithmeticException("element is not in Zq");

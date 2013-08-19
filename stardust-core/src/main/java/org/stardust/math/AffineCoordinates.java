@@ -12,9 +12,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class AffineCoordinates implements Coordinates {
 
-    private int x;
+    private final int x;
 
-    private int y;
+    private final int y;
 
     public AffineCoordinates(int x, int y) {
         this.x = x;
@@ -44,15 +44,9 @@ public class AffineCoordinates implements Coordinates {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
 }

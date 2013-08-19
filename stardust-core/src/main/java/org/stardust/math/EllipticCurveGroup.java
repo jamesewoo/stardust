@@ -17,7 +17,7 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
 
     @Override
     public int getGroupOrder() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return params.getP();
     }
 
     @Override
@@ -86,4 +86,5 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
     public boolean isValid(AffineCoordinates p) {
         return p.getY() * p.getY() == p.getX() * p.getX() * p.getX() + params.getA() * p.getX() + params.getB();
     }
+
 }
