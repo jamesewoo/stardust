@@ -27,6 +27,13 @@ public class ModularArithmetic {
             return gcd(y, x % y);
     }
 
+    /**
+     * Returns true if x is in Zq.
+     *
+     * @param x An integer
+     * @param q
+     * @return true if x is in Zq.
+     */
     public static boolean isElement(int x, int q) {
         return x >= 0 && x < q;
     }
@@ -83,5 +90,13 @@ public class ModularArithmetic {
             r_1 = r;
         }
         return x_2;
+    }
+
+    public static int reduceModP(int x, int p) {
+        if (x >= p)
+            return x % p;
+        else if (x < 0)
+            x += (1 - x / p) * p;
+        return x;
     }
 }

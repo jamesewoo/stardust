@@ -78,4 +78,14 @@ public class ModularArithmeticTest {
         assertEquals(-9, ModularArithmetic.extendedGcd(120, 23));
         assertEquals(47, ModularArithmetic.extendedGcd(23, 120));
     }
+
+    @Test
+    public void testReduceModP() {
+        assertEquals(14, ModularArithmetic.reduceModP(-55, 23));
+        assertEquals(14, ModularArithmetic.reduceModP(-32, 23));
+        assertEquals(14, ModularArithmetic.reduceModP(-9, 23));
+        assertEquals(14, ModularArithmetic.reduceModP(37, 23));
+        assertEquals(14, ModularArithmetic.reduceModP(60, 23));
+        assertEquals(14, ModularArithmetic.reduceModP(83, 23));
+    }
 }
