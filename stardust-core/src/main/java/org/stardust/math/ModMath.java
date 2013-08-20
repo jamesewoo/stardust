@@ -7,10 +7,11 @@ package org.stardust.math;
  * Time: 1:48 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ModularArithmetic {
+public class ModMath {
 
     /**
      * Returns true if x and y are congruent modulo n.
+     *
      * @param x An integer
      * @param y An integer
      * @param n An integer
@@ -65,9 +66,10 @@ public class ModularArithmetic {
 
     /**
      * Returns the inverse of x modulo q.
+     *
      * @param x An integer
      * @param q An integer
-     * @return
+     * @return The inverse of x in Zq, if it exists; null otherwise
      */
     public static Integer inverse(int x, int q) {
         if (!isElement(x, q))
@@ -105,7 +107,7 @@ public class ModularArithmetic {
         return x_2;
     }
 
-    public static int reduceModP(int x, int p) {
+    public static int reduce(int x, int p) {
         if (x >= p)
             return x % p;
         else if (x < 0)

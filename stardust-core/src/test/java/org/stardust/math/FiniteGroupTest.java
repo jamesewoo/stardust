@@ -27,11 +27,11 @@ public class FiniteGroupTest<T> extends GroupTest<T> {
     public void finiteOrderTest2(T a, int x, int y, int m) {
         int r = G.getOrder(a);
         assertEquals(G.operateN(a, x), G.operateN(a, x + m * r));
-        if (ModularArithmetic.isCongruent(x, y, r)) {
+        if (ModMath.isCongruent(x, y, r)) {
             assertEquals(G.operateN(a, x), G.operateN(a, y));
         }
         if (G.operateN(a, x).equals(G.operateN(a, y))) {
-            assertTrue(ModularArithmetic.isCongruent(x, y, r));
+            assertTrue(ModMath.isCongruent(x, y, r));
         }
     }
 
@@ -39,7 +39,7 @@ public class FiniteGroupTest<T> extends GroupTest<T> {
         int r = G.getOrder(a);
         FiniteGroup<T> H = G.getCyclicSubgroup(a);
         assertEquals(r, H.getGroupOrder());
-        if (ModularArithmetic.isCoprime(m, r))
+        if (ModMath.isCoprime(m, r))
             assertEquals(H, G.getCyclicSubgroup(G.operateN(a, m)));
     }
 

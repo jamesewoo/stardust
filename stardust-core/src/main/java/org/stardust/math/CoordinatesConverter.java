@@ -10,9 +10,9 @@ package org.stardust.math;
 public class CoordinatesConverter {
 
     public boolean isEqual(AffineCoordinates p, HomogeneousCoordinates q, int order) {
-        int zInverse = ModularArithmetic.inverse(q.getZ(), order);
-        return (p.getX() == ModularArithmetic.multiply(q.getX(), zInverse, order))
-                && (p.getY() == ModularArithmetic.multiply(q.getY(), zInverse, order));
+        int zInverse = ModMath.inverse(q.getZ(), order);
+        return (p.getX() == ModMath.multiply(q.getX(), zInverse, order))
+                && (p.getY() == ModMath.multiply(q.getY(), zInverse, order));
     }
 
     public HomogeneousCoordinates convert(AffineCoordinates p) {
@@ -20,8 +20,8 @@ public class CoordinatesConverter {
     }
 
     public AffineCoordinates convert(HomogeneousCoordinates p, int order) {
-        int zInverse = ModularArithmetic.inverse(p.getZ(), order);
-        return new AffineCoordinates(ModularArithmetic.multiply(p.getX(), zInverse, order),
-                ModularArithmetic.multiply(p.getY(), zInverse, order));
+        int zInverse = ModMath.inverse(p.getZ(), order);
+        return new AffineCoordinates(ModMath.multiply(p.getX(), zInverse, order),
+                ModMath.multiply(p.getY(), zInverse, order));
     }
 }

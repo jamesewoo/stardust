@@ -1,5 +1,8 @@
 package org.stardust.math;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * Created with IntelliJ IDEA.
  * User: evadrone
@@ -19,6 +22,20 @@ public class HomogeneousCoordinates implements Coordinates {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof HomogeneousCoordinates) {
+            HomogeneousCoordinates coords = (HomogeneousCoordinates) obj;
+            return new EqualsBuilder().append(x, coords.getX()).append(y, coords.getY()).append(z, coords.getZ()).isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(x).append(y).append(z).toHashCode();
     }
 
     @Override
