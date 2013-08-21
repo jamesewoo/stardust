@@ -41,6 +41,8 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
     }
 
     public Coordinates operate(AffineCoordinates p, AffineCoordinates q) {
+        if (!isValid(p) || !isValid(q))
+            throw new RuntimeException("invalid point");
         if (!p.equals(q) && p.getX() == q.getX())
             return Coordinates.POINT_AT_INFINITY;
         else if (!p.equals(q) && p.getX() != q.getX()) {
@@ -62,25 +64,28 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
         }
     }
 
-    public Coordinates operate(HomogeneousCoordinates p1, HomogeneousCoordinates p2) {
-        if (!p1.equals(Coordinates.POINT_AT_INFINITY)
-                && !p2.equals(Coordinates.POINT_AT_INFINITY)
-                && !p1.equals(p2)
-                && !p1.equals(p2.getInverse())) {
-            int u = ModMath.reduce(p2.getY() * p1.getZ() - p1.getY() * p2.getZ(), params.getP());
-            int v = ModMath.reduce(p2.getX() * p1.getZ() - p1.getX() * p2.getZ(), params.getP());
-            int x = v * (p2.getZ() * (p1.getZ() * u * u - 2 * p1.getX() * v * v) - v * v * v);
-            int y = p2.getZ() * (3 * p1.getX() * u * v * v - p1.getY() * v * v * v - p1.getZ() * u * u * u) + u * v * v * v;
-            int z = v * v * v * p1.getZ() * p2.getZ();
+    public Coordinates operate(HomogeneousCoordinates p, HomogeneousCoordinates q) {
+        CoordinatesConverter converter = new CoordinatesConverter();
+        if (!isValid(converter.convert(p, params.getP())) || !isValid(converter.convert(q, params.getP())))
+            throw new RuntimeException("invalid point");
+        if (!p.equals(Coordinates.POINT_AT_INFINITY)
+                && !q.equals(Coordinates.POINT_AT_INFINITY)
+                && !p.equals(q)
+                && !p.equals(q.getInverse())) {
+            int u = ModMath.reduce(q.getY() * p.getZ() - p.getY() * q.getZ(), params.getP());
+            int v = ModMath.reduce(q.getX() * p.getZ() - p.getX() * q.getZ(), params.getP());
+            int x = v * (q.getZ() * (p.getZ() * u * u - 2 * p.getX() * v * v) - v * v * v);
+            int y = q.getZ() * (3 * p.getX() * u * v * v - p.getY() * v * v * v - p.getZ() * u * u * u) + u * v * v * v;
+            int z = v * v * v * p.getZ() * q.getZ();
             return new HomogeneousCoordinates(ModMath.reduce(x, params.getP()),
                     ModMath.reduce(y, params.getP()), ModMath.reduce(z, params.getP()));
-        } else if (!p1.equals(Coordinates.POINT_AT_INFINITY)
-                && !p2.equals(Coordinates.POINT_AT_INFINITY)
-                && p1.equals(p2)) {
-            int w = ModMath.reduce(3 * p1.getX() * p1.getX() + params.getA() * p1.getZ() * p1.getZ(), params.getP());
-            int x = 2 * p1.getY() * p1.getZ() * (w * w - 8 * p1.getX() * p1.getY() * p1.getY() * p1.getZ());
-            int y = 4 * p1.getY() * p1.getY() * p1.getZ() * (3 * w * p1.getX() - 2 * p1.getY() * p1.getY() * p1.getZ()) - w * w * w;
-            int z = 8 * (p1.getY() * p1.getZ()) * (p1.getY() * p1.getZ()) * (p1.getY() * p1.getZ());
+        } else if (!p.equals(Coordinates.POINT_AT_INFINITY)
+                && !q.equals(Coordinates.POINT_AT_INFINITY)
+                && p.equals(q)) {
+            int w = ModMath.reduce(3 * p.getX() * p.getX() + params.getA() * p.getZ() * p.getZ(), params.getP());
+            int x = 2 * p.getY() * p.getZ() * (w * w - 8 * p.getX() * p.getY() * p.getY() * p.getZ());
+            int y = 4 * p.getY() * p.getY() * p.getZ() * (3 * w * p.getX() - 2 * p.getY() * p.getY() * p.getZ()) - w * w * w;
+            int z = 8 * (p.getY() * p.getZ()) * (p.getY() * p.getZ()) * (p.getY() * p.getZ());
             return new HomogeneousCoordinates(ModMath.reduce(x, params.getP()),
                     ModMath.reduce(y, params.getP()), ModMath.reduce(z, params.getP()));
         } else
@@ -113,6 +118,8 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
     }
 
     public boolean isValid(AffineCoordinates p) {
+        if (!ModMath.isElement(p.getX(), params.getP()) || !ModMath.isElement(p.getY(), params.getP()))
+            return false;
         return p.getY() * p.getY() == p.getX() * p.getX() * p.getX() + params.getA() * p.getX() + params.getB();
     }
 
