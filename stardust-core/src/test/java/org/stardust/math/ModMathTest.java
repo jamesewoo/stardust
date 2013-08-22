@@ -7,11 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/17/13
- * Time: 2:07 PM
- * To change this template use File | Settings | File Templates.
+ * Tests for {@link ModMath}
  */
 public class ModMathTest {
 
@@ -71,6 +67,9 @@ public class ModMathTest {
         assertTrue(ModMath.isCongruent(47, ModMath.inverse(23, 120), 120));
         assertTrue(ModMath.isCongruent(-9, ModMath.inverse(5, 23), 23));
         assertTrue(ModMath.isCongruent(14, ModMath.inverse(5, 23), 23));
+        assertEquals(Integer.valueOf(4), ModMath.inverse(2, 7));
+        assertEquals(Integer.valueOf(2), ModMath.inverse(4, 7));
+        assertEquals(Integer.valueOf(1), ModMath.inverse(1, 7));
     }
 
     @Test
@@ -87,5 +86,16 @@ public class ModMathTest {
         assertEquals(14, ModMath.reduce(37, 23));
         assertEquals(14, ModMath.reduce(60, 23));
         assertEquals(14, ModMath.reduce(83, 23));
+    }
+
+    @Test
+    public void testPow() {
+        assertEquals(1, ModMath.pow(2, 0, 7));
+        assertEquals(2, ModMath.pow(2, 1, 7));
+        assertEquals(4, ModMath.pow(2, 2, 7));
+        assertEquals(1, ModMath.pow(2, 3, 7));
+        assertEquals(ModMath.inverse(1, 7).intValue(), ModMath.pow(2, -3, 7));
+        assertEquals(ModMath.inverse(4, 7).intValue(), ModMath.pow(2, -2, 7));
+        assertEquals(ModMath.inverse(2, 7).intValue(), ModMath.pow(2, -1, 7));
     }
 }

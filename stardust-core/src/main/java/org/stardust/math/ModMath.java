@@ -24,6 +24,13 @@ public class ModMath {
             return (y - x) % n == 0;
     }
 
+    /**
+     * Returns true if x and y are coprime.
+     *
+     * @param x An integer
+     * @param y An integer
+     * @return true if x and y are coprime.
+     */
     public static boolean isCoprime(int x, int y) {
         return gcd(x, y) == 1;
     }
@@ -32,7 +39,7 @@ public class ModMath {
         if (y == 0)
             return x;
         else
-            return gcd(y, x % y);
+            return gcd(y, x - y * (x / y));
     }
 
     /**
@@ -46,36 +53,52 @@ public class ModMath {
         return x >= 0 && x < q;
     }
 
+    /**
+     * Returns x + y mod q
+     *
+     * @param x An arbitrary integer
+     * @param y An arbitrary integer
+     * @param q An arbitrary integer
+     * @return x + y mod q
+     */
     public static int add(int x, int y, int q) {
-        if (!isElement(x, q) || !isElement(y, q))
-            throw new ArithmeticException("element is not in Zq");
-        return (x + y) % q;
+        return reduce(x + y, q);
     }
 
+    /**
+     * Returns x - y mod q
+     *
+     * @param x An arbitrary integer
+     * @param y An arbitrary integer
+     * @param q An arbitrary integer
+     * @return x - y mod q
+     */
     public static int subtract(int x, int y, int q) {
-        if (!isElement(x, q) || !isElement(y, q))
-            throw new ArithmeticException("element is not in Zq");
-        return (x - y) >= 0 ? x - y : x - y + q;
+        return reduce(x - y, q);
     }
 
+    /**
+     * Returns x * y mod q
+     *
+     * @param x An arbitrary integer
+     * @param y An arbitrary integer
+     * @param q An arbitrary integer
+     * @return x * y mod q
+     */
     public static int multiply(int x, int y, int q) {
-        if (!isElement(x, q) || !isElement(y, q))
-            throw new ArithmeticException("element is not in Zq");
-        return (x * y) % q;
+        return reduce(x * y, q);
     }
 
     /**
      * Returns the inverse of x modulo q.
      *
-     * @param x An integer
+     * @param x An integer in Zq
      * @param q An integer
      * @return The inverse of x in Zq, if it exists; null otherwise
      */
     public static Integer inverse(int x, int q) {
-        if (!isElement(x, q))
-            throw new ArithmeticException("element is not in Zq");
         if (isCoprime(x, q)) {
-            return extendedGcd(x, q);
+            return reduce(extendedGcd(x, q), q);
         } else
             return null;
     }
@@ -107,11 +130,38 @@ public class ModMath {
         return x_2;
     }
 
-    public static int reduce(int x, int p) {
-        if (x >= p)
-            return x % p;
+    /**
+     * Reduces x so that the result is an element of Zq.
+     *
+     * @param x An integer
+     * @param q An integer
+     * @return an element of Zq.
+     */
+    public static int reduce(int x, int q) {
+        if (x >= q)
+            return x % q;
         else if (x < 0)
-            x += (1 - x / p) * p;
+            x += (1 - x / q) * q;
         return x;
+    }
+
+    /**
+     * Returns x^exponent mod p
+     *
+     * @param x        An integer
+     * @param exponent An integer exponent
+     * @param p        An integer
+     * @return Returns x^exponent mod p
+     */
+    public static int pow(int x, int exponent, int p) {
+        int res = 1;
+        for (int i = 1; i <= Math.abs(exponent); ++i) {
+            res *= x;
+        }
+        res = reduce(res, p);
+        if (exponent >= 0)
+            return res;
+        else
+            return inverse(res, p);
     }
 }

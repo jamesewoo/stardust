@@ -11,8 +11,13 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
 
     private EllipticCurveParameters params;
 
-    public EllipticCurveGroup(EllipticCurveParameters params) {
+    private FiniteField field;
+
+    public EllipticCurveGroup(EllipticCurveParameters params) throws EllipticCurveException {
         this.params = params;
+        this.field = new FiniteField(params.getP());
+        if (ModMath.isCongruent(4 * field.pow(params.getA(), 3) + 27 * field.pow(params.getB(), 2), 0, params.getP()))
+            throw new EllipticCurveException("invalid discriminant");
     }
 
     @Override
