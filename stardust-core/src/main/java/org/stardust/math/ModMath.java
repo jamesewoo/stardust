@@ -153,7 +153,7 @@ public class ModMath {
      * @param p        An integer
      * @return Returns x^exponent mod p
      */
-    public static int pow(int x, int exponent, int p) {
+    public static Integer pow(int x, int exponent, int p) {
         int res = 1;
         for (int i = 1; i <= Math.abs(exponent); ++i) {
             res *= x;

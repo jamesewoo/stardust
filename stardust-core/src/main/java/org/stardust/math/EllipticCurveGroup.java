@@ -49,7 +49,7 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
         if (!isValid(p) || !isValid(q))
             throw new RuntimeException("invalid point");
         if (!p.equals(q) && p.getX() == q.getX())
-            return Coordinates.POINT_AT_INFINITY;
+            return AffineCoordinates.getPointAtInfinity();
         else if (!p.equals(q) && p.getX() != q.getX()) {
             int d = (q.getY() - p.getY()) / (q.getX() - p.getX());
             int x = d * d - p.getX() - q.getX();
@@ -58,7 +58,7 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
             y = ModMath.reduce(y, params.getP());
             return new AffineCoordinates(x, y);
         } else if (p.equals(q) && p.getY() == 0)
-            return Coordinates.POINT_AT_INFINITY;
+            return AffineCoordinates.getPointAtInfinity();
         else {
             int d = (3 * p.getX() * p.getX() + params.getA()) / (2 * p.getY());
             int x = d * d - 2 * p.getX();
@@ -73,8 +73,8 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
         CoordinatesConverter converter = new CoordinatesConverter();
         if (!isValid(converter.convert(p, params.getP())) || !isValid(converter.convert(q, params.getP())))
             throw new RuntimeException("invalid point");
-        if (!p.equals(Coordinates.POINT_AT_INFINITY)
-                && !q.equals(Coordinates.POINT_AT_INFINITY)
+        if (!p.equals(HomogeneousCoordinates.getPointAtInfinity())
+                && !q.equals(HomogeneousCoordinates.getPointAtInfinity())
                 && !p.equals(q)
                 && !p.equals(q.getInverse())) {
             int u = ModMath.reduce(q.getY() * p.getZ() - p.getY() * q.getZ(), params.getP());
@@ -84,8 +84,8 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
             int z = v * v * v * p.getZ() * q.getZ();
             return new HomogeneousCoordinates(ModMath.reduce(x, params.getP()),
                     ModMath.reduce(y, params.getP()), ModMath.reduce(z, params.getP()));
-        } else if (!p.equals(Coordinates.POINT_AT_INFINITY)
-                && !q.equals(Coordinates.POINT_AT_INFINITY)
+        } else if (!p.equals(HomogeneousCoordinates.getPointAtInfinity())
+                && !q.equals(HomogeneousCoordinates.getPointAtInfinity())
                 && p.equals(q)) {
             int w = ModMath.reduce(3 * p.getX() * p.getX() + params.getA() * p.getZ() * p.getZ(), params.getP());
             int x = 2 * p.getY() * p.getZ() * (w * w - 8 * p.getX() * p.getY() * p.getY() * p.getZ());

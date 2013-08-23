@@ -3,6 +3,8 @@ package org.stardust.math;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.math.BigInteger;
+
 /**
  * Created with IntelliJ IDEA.
  * User: evadrone
@@ -12,13 +14,30 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class HomogeneousCoordinates implements Coordinates {
 
-    private final int x;
+    private final BigInteger x;
 
-    private final int y;
+    private final BigInteger y;
 
-    private final int z;
+    private final BigInteger z;
+
+    public static final HomogeneousCoordinates POINT_AT_INFINITY = new HomogeneousCoordinates(null, null, null);
+
+    /**
+     * Gets the point at infinity.
+     *
+     * @return the point at infinity.
+     */
+    public static Coordinates getPointAtInfinity() {
+        return POINT_AT_INFINITY;
+    }
 
     public HomogeneousCoordinates(int x, int y, int z) {
+        this.x = BigInteger.valueOf(x);
+        this.y = BigInteger.valueOf(y);
+        this.z = BigInteger.valueOf(z);
+    }
+
+    public HomogeneousCoordinates(BigInteger x, BigInteger y, BigInteger z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -26,9 +45,12 @@ public class HomogeneousCoordinates implements Coordinates {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof HomogeneousCoordinates) {
+        if (this == POINT_AT_INFINITY && obj == POINT_AT_INFINITY)
+            return true;
+        else if (obj instanceof HomogeneousCoordinates) {
             HomogeneousCoordinates coords = (HomogeneousCoordinates) obj;
-            return new EqualsBuilder().append(x, coords.getX()).append(y, coords.getY()).append(z, coords.getZ()).isEquals();
+            return new EqualsBuilder().append(getX(), coords.getX())
+                    .append(getY(), coords.getY()).append(getZ(), coords.getZ()).isEquals();
         }
         return false;
     }
@@ -44,14 +66,14 @@ public class HomogeneousCoordinates implements Coordinates {
     }
 
     public int getX() {
-        return x;
+        return x.intValue();
     }
 
     public int getY() {
-        return y;
+        return y.intValue();
     }
 
     public int getZ() {
-        return z;
+        return z.intValue();
     }
 }

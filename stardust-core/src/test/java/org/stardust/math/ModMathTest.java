@@ -90,12 +90,12 @@ public class ModMathTest {
 
     @Test
     public void testPow() {
-        assertEquals(1, ModMath.pow(2, 0, 7));
-        assertEquals(2, ModMath.pow(2, 1, 7));
-        assertEquals(4, ModMath.pow(2, 2, 7));
-        assertEquals(1, ModMath.pow(2, 3, 7));
-        assertEquals(ModMath.inverse(1, 7).intValue(), ModMath.pow(2, -3, 7));
-        assertEquals(ModMath.inverse(4, 7).intValue(), ModMath.pow(2, -2, 7));
-        assertEquals(ModMath.inverse(2, 7).intValue(), ModMath.pow(2, -1, 7));
+        assertEquals(Integer.valueOf(1), ModMath.pow(2, 0, 7));
+        assertEquals(Integer.valueOf(2), ModMath.pow(2, 1, 7));
+        assertEquals(Integer.valueOf(4), ModMath.pow(2, 2, 7));
+        assertEquals(Integer.valueOf(1), ModMath.pow(2, 3, 7));
+        assertEquals(ModMath.inverse(1, 7), ModMath.pow(2, -3, 7));
+        assertEquals(ModMath.inverse(4, 7), ModMath.pow(2, -2, 7));
+        assertEquals(ModMath.inverse(2, 7), ModMath.pow(2, -1, 7));
     }
 }
