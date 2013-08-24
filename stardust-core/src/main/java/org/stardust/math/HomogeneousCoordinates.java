@@ -62,7 +62,7 @@ public class HomogeneousCoordinates implements Coordinates {
 
     @Override
     public Coordinates getInverse() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new HomogeneousCoordinates(x, y.negate(), z);
     }
 
     public int getX() {

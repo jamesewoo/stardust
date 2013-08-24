@@ -10,7 +10,7 @@ public class FiniteField {
     /**
      * Creates a finite field with characteristic p.
      *
-     * @param p
+     * @param p the characteristic
      */
     public FiniteField(int p) {
         this.p = p;

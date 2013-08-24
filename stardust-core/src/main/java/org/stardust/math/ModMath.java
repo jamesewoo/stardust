@@ -1,11 +1,7 @@
 package org.stardust.math;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/17/13
- * Time: 1:48 PM
- * To change this template use File | Settings | File Templates.
+ * Modular arithmetic functions.
  */
 public class ModMath {
 
@@ -18,6 +14,8 @@ public class ModMath {
      * @return true if x and y are congruent modulo n.
      */
     public static boolean isCongruent(int x, int y, int n) {
+        if (n < 1)
+            throw new ArithmeticException("n cannot be less than 1");
         if (x >= y)
             return (x - y) % n == 0;
         else
@@ -35,6 +33,13 @@ public class ModMath {
         return gcd(x, y) == 1;
     }
 
+    /**
+     * Returns the greatest common denominator of x and y.
+     *
+     * @param x An integer
+     * @param y An integer
+     * @return the greatest common denominator of x and y.
+     */
     public static int gcd(int x, int y) {
         if (y == 0)
             return x;
@@ -43,11 +48,11 @@ public class ModMath {
     }
 
     /**
-     * Returns true if x is in Zq.
+     * Returns true if x is an element of Zq.
      *
      * @param x An integer
      * @param q An integer
-     * @return true if x is in Zq.
+     * @return true if x is an element of Zq.
      */
     public static boolean isElement(int x, int q) {
         return x >= 0 && x < q;
@@ -62,6 +67,8 @@ public class ModMath {
      * @return x + y mod q
      */
     public static int add(int x, int y, int q) {
+        if (q < 1)
+            throw new ArithmeticException("q cannot be less than 1");
         return reduce(x + y, q);
     }
 
@@ -74,6 +81,8 @@ public class ModMath {
      * @return x - y mod q
      */
     public static int subtract(int x, int y, int q) {
+        if (q < 1)
+            throw new ArithmeticException("q cannot be less than 1");
         return reduce(x - y, q);
     }
 
@@ -86,6 +95,8 @@ public class ModMath {
      * @return x * y mod q
      */
     public static int multiply(int x, int y, int q) {
+        if (q < 1)
+            throw new ArithmeticException("q cannot be less than 1");
         return reduce(x * y, q);
     }
 
@@ -97,6 +108,8 @@ public class ModMath {
      * @return The inverse of x in Zq, if it exists; null otherwise
      */
     public static Integer inverse(int x, int q) {
+        if (q < 1)
+            throw new ArithmeticException("q cannot be less than 1");
         if (isCoprime(x, q)) {
             return reduce(extendedGcd(x, q), q);
         } else
@@ -138,6 +151,8 @@ public class ModMath {
      * @return an element of Zq.
      */
     public static int reduce(int x, int q) {
+        if (q < 1)
+            throw new ArithmeticException("q cannot be less than 1");
         if (x >= q)
             return x % q;
         else if (x < 0)
@@ -146,22 +161,24 @@ public class ModMath {
     }
 
     /**
-     * Returns x^exponent mod p
+     * Returns x raised to the exponent modulo q
      *
      * @param x        An integer
      * @param exponent An integer exponent
-     * @param p        An integer
-     * @return Returns x^exponent mod p
+     * @param q        An integer
+     * @return Returns x^exponent mod q
      */
-    public static Integer pow(int x, int exponent, int p) {
+    public static Integer pow(int x, int exponent, int q) {
+        if (q < 1)
+            throw new ArithmeticException("q cannot be less than 1");
         int res = 1;
         for (int i = 1; i <= Math.abs(exponent); ++i) {
             res *= x;
         }
-        res = reduce(res, p);
+        res = reduce(res, q);
         if (exponent >= 0)
             return res;
         else
-            return inverse(res, p);
+            return inverse(res, q);
     }
 }

@@ -123,9 +123,9 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
     }
 
     public boolean isValid(AffineCoordinates p) {
-        if (!ModMath.isElement(p.getX(), params.getP()) || !ModMath.isElement(p.getY(), params.getP()))
+        if (!field.isElement(p.getX()) || !field.isElement(p.getY()))
             return false;
-        return p.getY() * p.getY() == p.getX() * p.getX() * p.getX() + params.getA() * p.getX() + params.getB();
+        return field.pow(p.getY(), 2) == field.pow(p.getX(), 3) + params.getA() * p.getX() + params.getB();
     }
 
 }
