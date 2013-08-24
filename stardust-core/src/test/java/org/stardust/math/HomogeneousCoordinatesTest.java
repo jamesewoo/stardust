@@ -17,6 +17,5 @@ public class HomogeneousCoordinatesTest {
         HomogeneousCoordinates p1 = new HomogeneousCoordinates(0, 1, 1);
         HomogeneousCoordinates p2 = new HomogeneousCoordinates(0, 1, 1);
         assertEquals(p1, p2);
-        assertEquals(HomogeneousCoordinates.POINT_AT_INFINITY, HomogeneousCoordinates.getPointAtInfinity());
     }
 }

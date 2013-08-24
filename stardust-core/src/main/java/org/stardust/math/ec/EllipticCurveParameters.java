@@ -1,11 +1,7 @@
-package org.stardust.math;
+package org.stardust.math.ec;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/18/13
- * Time: 5:33 PM
- * To change this template use File | Settings | File Templates.
+ * Elliptic curve parameters.
  */
 public class EllipticCurveParameters {
 

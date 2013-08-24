@@ -2,6 +2,8 @@ package org.stardust.math;
 
 /**
  * A mathematical group.
+ *
+ * @param <T> The group element type
  */
 public interface Group<T> {
 

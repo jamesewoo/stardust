@@ -6,11 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.math.BigInteger;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/18/13
- * Time: 6:15 PM
- * To change this template use File | Settings | File Templates.
+ * Homogeneous coordinates.
  */
 public class HomogeneousCoordinates implements Coordinates {
 
@@ -19,17 +15,6 @@ public class HomogeneousCoordinates implements Coordinates {
     private final BigInteger y;
 
     private final BigInteger z;
-
-    public static final HomogeneousCoordinates POINT_AT_INFINITY = new HomogeneousCoordinates(null, null, null);
-
-    /**
-     * Gets the point at infinity.
-     *
-     * @return the point at infinity.
-     */
-    public static Coordinates getPointAtInfinity() {
-        return POINT_AT_INFINITY;
-    }
 
     public HomogeneousCoordinates(int x, int y, int z) {
         this.x = BigInteger.valueOf(x);
@@ -45,9 +30,7 @@ public class HomogeneousCoordinates implements Coordinates {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == POINT_AT_INFINITY && obj == POINT_AT_INFINITY)
-            return true;
-        else if (obj instanceof HomogeneousCoordinates) {
+        if (obj instanceof HomogeneousCoordinates) {
             HomogeneousCoordinates coords = (HomogeneousCoordinates) obj;
             return new EqualsBuilder().append(getX(), coords.getX())
                     .append(getY(), coords.getY()).append(getZ(), coords.getZ()).isEquals();
@@ -60,8 +43,7 @@ public class HomogeneousCoordinates implements Coordinates {
         return new HashCodeBuilder().append(x).append(y).append(z).toHashCode();
     }
 
-    @Override
-    public Coordinates getInverse() {
+    public HomogeneousCoordinates getInverse() {
         return new HomogeneousCoordinates(x, y.negate(), z);
     }
 

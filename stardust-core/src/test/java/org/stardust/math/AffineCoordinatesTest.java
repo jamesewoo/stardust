@@ -18,6 +18,5 @@ public class AffineCoordinatesTest {
         AffineCoordinates p1 = new AffineCoordinates(0, 1);
         assertEquals(p1, new AffineCoordinates(0, 1));
         assertEquals(new AffineCoordinates(0, -1), p1.getInverse());
-        assertEquals(AffineCoordinates.POINT_AT_INFINITY, AffineCoordinates.getPointAtInfinity());
     }
 }

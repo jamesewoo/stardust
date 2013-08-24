@@ -1,19 +1,33 @@
-package org.stardust.math;
+package org.stardust.math.ec;
+
+import org.stardust.math.*;
 
 /**
- * An elliptic curve group.
+ * An elliptic curve group using homogeneous coordinates.
  */
-public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
+public class HomogeneousECGroup implements ECGroup<HomogeneousCoordinates> {
+
+    public static final HomogeneousCoordinates POINT_AT_INFINITY = new HomogeneousCoordinates(null, null, null);
 
     private EllipticCurveParameters params;
 
     private FiniteField field;
 
-    public EllipticCurveGroup(EllipticCurveParameters params) throws EllipticCurveException {
+
+    public HomogeneousECGroup(EllipticCurveParameters params) throws EllipticCurveException {
         this.params = params;
         this.field = new FiniteField(params.getP());
         if (ModMath.isCongruent(4 * field.pow(params.getA(), 3) + 27 * field.pow(params.getB(), 2), 0, params.getP()))
             throw new EllipticCurveException("invalid discriminant");
+    }
+
+    /**
+     * Gets the point at infinity.
+     *
+     * @return the point at infinity.
+     */
+    public HomogeneousCoordinates getPointAtInfinity() {
+        return POINT_AT_INFINITY;
     }
 
     @Override
@@ -22,55 +36,21 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
     }
 
     @Override
-    public int getOrder(Coordinates a) {
+    public int getOrder(HomogeneousCoordinates a) {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public FiniteGroup<Coordinates> getCyclicSubgroup(Coordinates a) {
+    public FiniteGroup<HomogeneousCoordinates> getCyclicSubgroup(HomogeneousCoordinates a) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
-    public Coordinates operate(Coordinates p, Coordinates q) {
-        if (p instanceof AffineCoordinates && q instanceof AffineCoordinates)
-            return operate((AffineCoordinates) p, (AffineCoordinates) q);
-        if (p instanceof HomogeneousCoordinates && q instanceof HomogeneousCoordinates)
-            return operate((HomogeneousCoordinates) p, (HomogeneousCoordinates) q);
-        else
-            throw new IllegalArgumentException("unknown coordinate system");
-    }
-
-    public Coordinates operate(AffineCoordinates p, AffineCoordinates q) {
-        if (!isValid(p) || !isValid(q))
-            throw new RuntimeException("invalid point");
-        if (!p.equals(q) && p.getX() == q.getX())
-            return AffineCoordinates.getPointAtInfinity();
-        else if (!p.equals(q) && p.getX() != q.getX()) {
-            int d = (q.getY() - p.getY()) / (q.getX() - p.getX());
-            int x = d * d - p.getX() - q.getX();
-            int y = (p.getX() - x) * (q.getY() - p.getY()) / (q.getX() - p.getX()) - p.getY();
-            x = ModMath.reduce(x, params.getP());
-            y = ModMath.reduce(y, params.getP());
-            return new AffineCoordinates(x, y);
-        } else if (p.equals(q) && p.getY() == 0)
-            return AffineCoordinates.getPointAtInfinity();
-        else {
-            int d = (3 * p.getX() * p.getX() + params.getA()) / (2 * p.getY());
-            int x = d * d - 2 * p.getX();
-            int y = (p.getX() - x) * (3 * p.getX() * p.getX() + params.getA()) / (2 * p.getY()) - p.getY();
-            x = ModMath.reduce(x, params.getP());
-            y = ModMath.reduce(y, params.getP());
-            return new AffineCoordinates(x, y);
-        }
-    }
-
-    public Coordinates operate(HomogeneousCoordinates p, HomogeneousCoordinates q) {
+    public HomogeneousCoordinates operate(HomogeneousCoordinates p, HomogeneousCoordinates q) {
         CoordinatesConverter converter = new CoordinatesConverter();
         if (!isValid(converter.convert(p, params.getP())) || !isValid(converter.convert(q, params.getP())))
             throw new RuntimeException("invalid point");
-        if (!p.equals(HomogeneousCoordinates.getPointAtInfinity())
-                && !q.equals(HomogeneousCoordinates.getPointAtInfinity())
+        if (!p.equals(POINT_AT_INFINITY)
+                && !q.equals(POINT_AT_INFINITY)
                 && !p.equals(q)
                 && !p.equals(q.getInverse())) {
             int u = ModMath.reduce(q.getY() * p.getZ() - p.getY() * q.getZ(), params.getP());
@@ -80,8 +60,8 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
             int z = v * v * v * p.getZ() * q.getZ();
             return new HomogeneousCoordinates(ModMath.reduce(x, params.getP()),
                     ModMath.reduce(y, params.getP()), ModMath.reduce(z, params.getP()));
-        } else if (!p.equals(HomogeneousCoordinates.getPointAtInfinity())
-                && !q.equals(HomogeneousCoordinates.getPointAtInfinity())
+        } else if (!p.equals(POINT_AT_INFINITY)
+                && !q.equals(POINT_AT_INFINITY)
                 && p.equals(q)) {
             int w = ModMath.reduce(3 * p.getX() * p.getX() + params.getA() * p.getZ() * p.getZ(), params.getP());
             int x = 2 * p.getY() * p.getZ() * (w * w - 8 * p.getX() * p.getY() * p.getY() * p.getZ());
@@ -94,22 +74,22 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
     }
 
     @Override
-    public Coordinates operateN(Coordinates a, int n) {
+    public HomogeneousCoordinates operateN(HomogeneousCoordinates a, int n) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public Coordinates getIdentity() {
+    public HomogeneousCoordinates getIdentity() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public Coordinates getInverse(Coordinates a) {
+    public HomogeneousCoordinates getInverse(HomogeneousCoordinates a) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public boolean isElement(Coordinates a) {
+    public boolean isElement(HomogeneousCoordinates a) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
