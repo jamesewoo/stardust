@@ -1,14 +1,14 @@
 package org.stardust.math;
 
 /**
- * A finite field.
+ * A finite field with prime characteristic.
  */
 public class FiniteField {
 
     private int p;
 
     /**
-     * Creates a finite field with characteristic p.
+     * Creates a finite field with prime characteristic p.
      *
      * @param p the characteristic
      */
@@ -26,14 +26,35 @@ public class FiniteField {
         return ModMath.isElement(x, p);
     }
 
+    /**
+     * Returns x + y mod p
+     *
+     * @param x an integer
+     * @param y an integer
+     * @return x + y mod p
+     */
     public int add(int x, int y) {
         return ModMath.add(x, y, p);
     }
 
+    /**
+     * Returns x - y mod p
+     *
+     * @param x an integer
+     * @param y an integer
+     * @return x - y mod p
+     */
     public int subtract(int x, int y) {
         return ModMath.subtract(x, y, p);
     }
 
+    /**
+     * Returns x * y mod p
+     *
+     * @param x an integer
+     * @param y an integer
+     * @return x * y mod p
+     */
     public int multiply(int x, int y) {
         return ModMath.multiply(x, y, p);
     }
@@ -53,11 +74,11 @@ public class FiniteField {
     }
 
     /**
-     * Returns x to the <code>exponent</code> power.
+     * Returns x raised to the <code>exponent</code> power, mod p.
      *
      * @param x        an integer
      * @param exponent an integer
-     * @return x to the <code>exponent</code> power.
+     * @return x raised to the <code>exponent</code> power, mod p.
      */
     public int pow(int x, int exponent) {
         return ModMath.pow(x, exponent, p);
@@ -68,7 +89,7 @@ public class FiniteField {
      *
      * @return the characteristic of the field.
      */
-    public int getP() {
+    public int getCharacteristic() {
         return p;
     }
 }

@@ -20,7 +20,6 @@ public class FiniteGroupTest<T> extends GroupTest<T> {
     }
 
     public void finiteOrderTest1(T a) {
-        assertTrue(G.hasFiniteOrder(a));
         assertEquals(0, G.getGroupOrder() % G.getOrder(a));
     }
 

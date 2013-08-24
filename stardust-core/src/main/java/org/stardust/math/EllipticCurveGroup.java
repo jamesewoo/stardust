@@ -1,11 +1,7 @@
 package org.stardust.math;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/18/13
- * Time: 5:29 PM
- * To change this template use File | Settings | File Templates.
+ * An elliptic curve group.
  */
 public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
 
@@ -114,11 +110,6 @@ public class EllipticCurveGroup implements FiniteGroup<Coordinates> {
 
     @Override
     public boolean isElement(Coordinates a) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean hasFiniteOrder(Coordinates a) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

@@ -161,12 +161,12 @@ public class ModMath {
     }
 
     /**
-     * Returns x raised to the exponent modulo q
+     * Returns x raised to the <code>exponent</code> power, mod q.
      *
      * @param x        An integer
      * @param exponent An integer exponent
      * @param q        An integer
-     * @return Returns x^exponent mod q
+     * @return x raised to the <code>exponent</code> power, mod q.
      */
     public static Integer pow(int x, int exponent, int q) {
         if (q < 1)
