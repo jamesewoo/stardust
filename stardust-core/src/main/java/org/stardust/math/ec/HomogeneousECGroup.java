@@ -2,37 +2,37 @@ package org.stardust.math.ec;
 
 import org.stardust.math.*;
 
+import java.math.BigInteger;
+
 /**
  * An elliptic curve group using homogeneous coordinates.
  */
 public class HomogeneousECGroup implements ECGroup<HomogeneousCoordinates> {
 
-    public static final HomogeneousCoordinates POINT_AT_INFINITY = new HomogeneousCoordinates(null, null, null);
+    public static final HomogeneousCoordinates POINT_AT_INFINITY = new HomogeneousCoordinates(0, 1, 0);
 
-    private EllipticCurveParameters params;
+    private final ECParameters params;
+    private final FiniteField field;
+    private final CoordinatesConverter converter;
 
-    private FiniteField field;
-
-
-    public HomogeneousECGroup(EllipticCurveParameters params) throws EllipticCurveException {
-        this.params = params;
-        this.field = new FiniteField(params.getP());
-        if (ModMath.isCongruent(4 * field.pow(params.getA(), 3) + 27 * field.pow(params.getB(), 2), 0, params.getP()))
-            throw new EllipticCurveException("invalid discriminant");
-    }
 
     /**
-     * Gets the point at infinity.
-     *
-     * @return the point at infinity.
+     * @param params
+     * @throws EllipticCurveException
      */
-    public HomogeneousCoordinates getPointAtInfinity() {
-        return POINT_AT_INFINITY;
+    public HomogeneousECGroup(ECParameters params) throws EllipticCurveException {
+        if (params.getP() <= 3)
+            throw new IllegalArgumentException("field characteristic cannot be less than or equal to 3");
+        this.params = params;
+        this.field = new FiniteField(params.getP());
+        if (field.isCongruent(getDiscriminant().intValue(), 0))
+            throw new EllipticCurveException("invalid discriminant");
+        converter = new CoordinatesConverter();
     }
 
     @Override
     public int getGroupOrder() {
-        return params.getP();
+        return 0; //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -45,32 +45,39 @@ public class HomogeneousECGroup implements ECGroup<HomogeneousCoordinates> {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public HomogeneousCoordinates operate(HomogeneousCoordinates p, HomogeneousCoordinates q) {
-        CoordinatesConverter converter = new CoordinatesConverter();
-        if (!isValid(converter.convert(p, params.getP())) || !isValid(converter.convert(q, params.getP())))
-            throw new RuntimeException("invalid point");
-        if (!p.equals(POINT_AT_INFINITY)
-                && !q.equals(POINT_AT_INFINITY)
-                && !p.equals(q)
-                && !p.equals(q.getInverse())) {
-            int u = ModMath.reduce(q.getY() * p.getZ() - p.getY() * q.getZ(), params.getP());
-            int v = ModMath.reduce(q.getX() * p.getZ() - p.getX() * q.getZ(), params.getP());
-            int x = v * (q.getZ() * (p.getZ() * u * u - 2 * p.getX() * v * v) - v * v * v);
-            int y = q.getZ() * (3 * p.getX() * u * v * v - p.getY() * v * v * v - p.getZ() * u * u * u) + u * v * v * v;
-            int z = v * v * v * p.getZ() * q.getZ();
-            return new HomogeneousCoordinates(ModMath.reduce(x, params.getP()),
-                    ModMath.reduce(y, params.getP()), ModMath.reduce(z, params.getP()));
-        } else if (!p.equals(POINT_AT_INFINITY)
-                && !q.equals(POINT_AT_INFINITY)
-                && p.equals(q)) {
-            int w = ModMath.reduce(3 * p.getX() * p.getX() + params.getA() * p.getZ() * p.getZ(), params.getP());
-            int x = 2 * p.getY() * p.getZ() * (w * w - 8 * p.getX() * p.getY() * p.getY() * p.getZ());
-            int y = 4 * p.getY() * p.getY() * p.getZ() * (3 * w * p.getX() - 2 * p.getY() * p.getY() * p.getZ()) - w * w * w;
-            int z = 8 * (p.getY() * p.getZ()) * (p.getY() * p.getZ()) * (p.getY() * p.getZ());
-            return new HomogeneousCoordinates(ModMath.reduce(x, params.getP()),
-                    ModMath.reduce(y, params.getP()), ModMath.reduce(z, params.getP()));
-        } else
-            throw new UnsupportedOperationException("operation undefined");
+    /**
+     * {@inheritDoc}
+     *
+     * @param p1 a point on the elliptic curve
+     * @param p2 a point on the elliptic curve
+     * @return the result of the group operation
+     */
+    @Override
+    public HomogeneousCoordinates operate(HomogeneousCoordinates p1, HomogeneousCoordinates p2) {
+        if (!isElement(p1) || !isElement(p2))
+            throw new IllegalArgumentException("invalid point in group operation");
+
+        if (POINT_AT_INFINITY.equals(p1))
+            return p2;
+        else if (POINT_AT_INFINITY.equals(p2))
+            return p1;
+
+        int u = field.reduce(p2.getY() * p1.getZ() - p1.getY() * p2.getZ());
+        int v = field.reduce(p2.getX() * p1.getZ() - p1.getX() * p2.getZ());
+        if (u != 0 && v == 0)
+            return POINT_AT_INFINITY;
+        else if (u != 0 && v != 0) {
+            int x3 = v * (p2.getZ() * (p1.getZ() * u * u - 2 * p1.getX() * v * v) - v * v * v);
+            int y3 = p2.getZ() * (3 * p1.getX() * u * v * v - p1.getY() * v * v * v - p1.getZ() * u * u * u) + u * v * v * v;
+            int z3 = v * v * v * p1.getZ() * p2.getZ();
+            return new HomogeneousCoordinates(field.reduce(x3), field.reduce(y3), field.reduce(z3));
+        } else {
+            int w = field.reduce(3 * p1.getX() * p1.getX() + params.getA() * p1.getZ() * p1.getZ());
+            int x3 = 2 * p1.getY() * p1.getZ() * (w * w - 8 * p1.getX() * p1.getY() * p1.getY() * p1.getZ());
+            int y3 = 4 * p1.getY() * p1.getY() * p1.getZ() * (3 * w * p1.getX() - 2 * p1.getY() * p1.getY() * p1.getZ()) - w * w * w;
+            int z3 = 8 * field.pow(p1.getY() * p1.getZ(), 3);
+            return new HomogeneousCoordinates(field.reduce(x3), field.reduce(y3), field.reduce(z3));
+        }
     }
 
     @Override
@@ -78,25 +85,46 @@ public class HomogeneousECGroup implements ECGroup<HomogeneousCoordinates> {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    /**
+     * Returns the point at infinity.
+     *
+     * @return the point at infinity.
+     */
     @Override
     public HomogeneousCoordinates getIdentity() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return POINT_AT_INFINITY;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HomogeneousCoordinates getInverse(HomogeneousCoordinates a) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (POINT_AT_INFINITY.equals(a))
+            return POINT_AT_INFINITY;
+        // TODO
+        return null;
     }
 
+    /**
+     * Returns true if the given point satisfies the curve equation.
+     *
+     * @param p A point
+     * @return true if the given point satisfies the curve equation; false otherwise.
+     */
     @Override
-    public boolean isElement(HomogeneousCoordinates a) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    public boolean isElement(HomogeneousCoordinates p) {
+        if (POINT_AT_INFINITY.equals(p))
+            return true;
+        AffineCoordinates affineP = converter.convert(p, params.getP());
+        return field.pow(affineP.getY(), 2) == field.pow(affineP.getX(), 3) + params.getA() * affineP.getX() + params.getB();
     }
 
-    public boolean isValid(AffineCoordinates p) {
-        if (!field.isElement(p.getX()) || !field.isElement(p.getY()))
-            return false;
-        return field.pow(p.getY(), 2) == field.pow(p.getX(), 3) + params.getA() * p.getX() + params.getB();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigInteger getDiscriminant() {
+        return BigInteger.valueOf(field.reduce(-16 * (4 * field.pow(params.getA(), 3) + 27 * field.pow(params.getB(), 2))));
     }
-
 }

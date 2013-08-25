@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class GroupTest<T> {
 
-    private Group<T> G;
+    private final Group<T> G;
 
     public GroupTest(Group<T> group) {
         this.G = group;

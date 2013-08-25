@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class FiniteGroupTest<T> extends GroupTest<T> {
 
-    private FiniteGroup<T> G;
+    private final FiniteGroup<T> G;
 
     public FiniteGroupTest(FiniteGroup<T> group) {
         super(group);

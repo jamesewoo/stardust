@@ -5,7 +5,7 @@ package org.stardust.math;
  */
 public class FiniteField {
 
-    private int p;
+    private final int p;
 
     /**
      * Creates a finite field with prime characteristic p.
@@ -82,6 +82,27 @@ public class FiniteField {
      */
     public int pow(int x, int exponent) {
         return ModMath.pow(x, exponent, p);
+    }
+
+    /**
+     * Reduces x so that the result is an element of Zp.
+     *
+     * @param x An integer
+     * @return an element of Zp.
+     */
+    public int reduce(int x) {
+        return ModMath.reduce(x, p);
+    }
+
+    /**
+     * Returns true if x and y are congruent modulo n.
+     *
+     * @param x An integer
+     * @param y An integer
+     * @return true if x and y are congruent modulo n.
+     */
+    public boolean isCongruent(int x, int y) {
+        return ModMath.isCongruent(x, y, p);
     }
 
     /**
