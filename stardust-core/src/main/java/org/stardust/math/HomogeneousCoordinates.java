@@ -43,19 +43,21 @@ public class HomogeneousCoordinates implements Coordinates {
         return new HashCodeBuilder().append(x).append(y).append(z).toHashCode();
     }
 
-    public HomogeneousCoordinates getInverse() {
-        return new HomogeneousCoordinates(x, y.negate(), z);
-    }
-
-    public int getX() {
+    public Integer getX() {
+        if (x == null)
+            return null;
         return x.intValue();
     }
 
-    public int getY() {
+    public Integer getY() {
+        if (y == null)
+            return null;
         return y.intValue();
     }
 
-    public int getZ() {
+    public Integer getZ() {
+        if (z == null)
+            return null;
         return z.intValue();
     }
 }

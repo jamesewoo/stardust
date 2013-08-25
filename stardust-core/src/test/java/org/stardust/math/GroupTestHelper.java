@@ -5,24 +5,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/17/13
- * Time: 10:40 PM
- * To change this template use File | Settings | File Templates.
+ * Methods for testing {@link Group}s
  */
-public class GroupTest<T> {
+public class GroupTestHelper<T> {
 
-    private final Group<T> G;
+    private Group<T> G;
 
-    public GroupTest(Group<T> group) {
+    public GroupTestHelper(Group<T> group) {
         this.G = group;
     }
 
-    public void operationTest(T a, T b) {
-        assertTrue(G.isElement(a));
-        assertTrue(G.isElement(b));
-        assertTrue(G.isElement(G.operate(a, b)));
+    public T operationTest(T a, T b) {
+        T res = G.operate(a, b);
+        assertTrue(G.isElement(res));
+        return res;
     }
 
     public void associativityTest(T a, T b, T c) {
@@ -41,9 +37,7 @@ public class GroupTest<T> {
     }
 
     public void operateNTest1(T a, int x) {
-        if (x > 0) {
-            assertEquals(G.operateN(G.getInverse(a), x), G.operateN(a, -x));
-        }
+        assertEquals(G.operateN(G.getInverse(a), x), G.operateN(a, -x));
     }
 
     public void operateNTest2(T a, int x, int y) {
@@ -51,4 +45,5 @@ public class GroupTest<T> {
         assertEquals(G.operateN(a, x * y), G.operateN(G.operateN(a, x), y));
         assertEquals(G.operateN(a, x * y), G.operateN(G.operateN(a, y), x));
     }
+
 }

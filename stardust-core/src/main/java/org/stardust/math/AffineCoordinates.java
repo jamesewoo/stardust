@@ -39,16 +39,15 @@ public class AffineCoordinates implements Coordinates {
         return new HashCodeBuilder().append(x).append(y).toHashCode();
     }
 
-    public AffineCoordinates getInverse() {
-        return new AffineCoordinates(x, y.negate());
-    }
-
-    public int getX() {
+    public Integer getX() {
+        if (x == null)
+            return null;
         return x.intValue();
     }
 
-
-    public int getY() {
+    public Integer getY() {
+        if (y == null)
+            return null;
         return y.intValue();
     }
 

@@ -4,17 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created with IntelliJ IDEA.
- * User: evadrone
- * Date: 8/18/13
- * Time: 1:10 PM
- * To change this template use File | Settings | File Templates.
+ * Methods for testing {@link FiniteGroup}s
  */
-public class FiniteGroupTest<T> extends GroupTest<T> {
+public class FiniteGroupTestHelper<T> extends GroupTestHelper<T> {
 
-    private final FiniteGroup<T> G;
+    private FiniteGroup<T> G;
 
-    public FiniteGroupTest(FiniteGroup<T> group) {
+    public FiniteGroupTestHelper(FiniteGroup<T> group) {
         super(group);
         this.G = group;
     }

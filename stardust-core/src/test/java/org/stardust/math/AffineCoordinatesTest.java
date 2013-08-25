@@ -17,6 +17,5 @@ public class AffineCoordinatesTest {
     public void testEquals() {
         AffineCoordinates p1 = new AffineCoordinates(0, 1);
         assertEquals(p1, new AffineCoordinates(0, 1));
-        assertEquals(new AffineCoordinates(0, -1), p1.getInverse());
     }
 }
