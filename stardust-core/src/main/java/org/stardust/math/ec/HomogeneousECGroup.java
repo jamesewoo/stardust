@@ -96,20 +96,20 @@ public class HomogeneousECGroup implements ECGroup<HomogeneousCoordinates> {
         else if (!u.equals(BigInteger.ZERO) && !v.equals(BigInteger.ZERO)) {
             BigInteger x3 = v.multiply(Z2.multiply(Z1.multiply(u.pow(2)).subtract(val(2).multiply(X1).multiply(v.pow(2)))).subtract(v.pow(3)));
             BigInteger y3 = Z2.multiply(val(3).multiply(X1).multiply(u).multiply(v.pow(2)).subtract(Y1.multiply(v.pow(3))).subtract(Z1.multiply(u.pow(3))).add(u.multiply(v.pow(3))));
-            BigInteger z3 = null;
+            BigInteger z3 = v.pow(3).multiply(Z1).multiply(Z2);
             return new HomogeneousCoordinates(field.reduce(x3), field.reduce(y3), field.reduce(z3));
         } else {
             BigInteger w = val(3).multiply(X1.pow(2)).add(params.getA().multiply(Z1.pow(2)));
             BigInteger x3 = val(2).multiply(Y1).multiply(Z1)
                     .multiply((w.pow(2)).subtract(val(8).multiply(X1).multiply(Y1.pow(2)).multiply(Z1)));
-            BigInteger y3 = null;
-            BigInteger z3 = null;
+            BigInteger y3 = val(4).multiply(Y1.pow(2)).multiply(Z1).multiply(val(3)).multiply(w).multiply(X1).subtract(val(2).multiply(Y1.pow(2)).multiply(Z1)).subtract(w.pow(3));
+            BigInteger z3 = val(8).multiply((Y1.multiply(Z1)).pow(3));
             return new HomogeneousCoordinates(field.reduce(x3), field.reduce(y3), field.reduce(z3));
         }
     }
 
     @Override
-    public HomogeneousCoordinates operateN(HomogeneousCoordinates a, int n) {
+    public HomogeneousCoordinates operateN(HomogeneousCoordinates a, BigInteger n) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

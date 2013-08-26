@@ -1,6 +1,8 @@
 package org.stardust.math;
 
 
+import java.math.BigInteger;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -36,14 +38,14 @@ public class GroupTestHelper<T> {
         assertEquals(G.getIdentity(), G.operate(b, a));
     }
 
-    public void operateNTest1(T a, int x) {
-        assertEquals(G.operateN(G.getInverse(a), x), G.operateN(a, -x));
+    public void operateNTest1(T a, BigInteger x) {
+        assertEquals(G.operateN(G.getInverse(a), x), G.operateN(a, x.negate()));
     }
 
-    public void operateNTest2(T a, int x, int y) {
-        assertEquals(G.operate(G.operateN(a, x), G.operateN(a, y)), G.operateN(a, x + y));
-        assertEquals(G.operateN(a, x * y), G.operateN(G.operateN(a, x), y));
-        assertEquals(G.operateN(a, x * y), G.operateN(G.operateN(a, y), x));
+    public void operateNTest2(T a, BigInteger x, BigInteger y) {
+        assertEquals(G.operate(G.operateN(a, x), G.operateN(a, y)), G.operateN(a, x.add(y)));
+        assertEquals(G.operateN(a, x.multiply(y)), G.operateN(G.operateN(a, x), y));
+        assertEquals(G.operateN(a, x.multiply(y)), G.operateN(G.operateN(a, y), x));
     }
 
 }

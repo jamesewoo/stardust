@@ -101,7 +101,7 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
     }
 
     @Override
-    public AffineCoordinates operateN(AffineCoordinates a, int n) {
+    public AffineCoordinates operateN(AffineCoordinates a, BigInteger n) {
         return null; //To change body of implemented methods use File | Settings | File Templates.
     }
 

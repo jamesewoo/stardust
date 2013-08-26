@@ -1,5 +1,7 @@
 package org.stardust.math;
 
+import java.math.BigInteger;
+
 /**
  * A mathematical group.
  *
@@ -23,7 +25,7 @@ public interface Group<T> {
      * @param n An element in G
      * @return the result of the group operation applied to <code>a</code> n-1 times.
      */
-    public T operateN(T a, int n);
+    public T operateN(T a, BigInteger n);
 
     /**
      * Returns the identity element of G.
