@@ -1,18 +1,20 @@
 package org.stardust.math;
 
+import java.math.BigInteger;
+
 /**
  * A finite field with prime characteristic.
  */
 public class FiniteField {
 
-    private final int p;
+    private final BigInteger p;
 
     /**
      * Creates a finite field with prime characteristic p.
      *
      * @param p the characteristic
      */
-    public FiniteField(int p) {
+    public FiniteField(BigInteger p) {
         this.p = p;
     }
 
@@ -22,40 +24,40 @@ public class FiniteField {
      * @param x an element of the field
      * @return true if x is an element of the field; false otherwise.
      */
-    public boolean isElement(int x) {
+    public boolean isElement(BigInteger x) {
         return ModMath.isElement(x, p);
     }
 
     /**
      * Returns x + y mod p
      *
-     * @param x an integer
-     * @param y an integer
+     * @param x an BigIntegereger
+     * @param y an BigIntegereger
      * @return x + y mod p
      */
-    public int add(int x, int y) {
+    public BigInteger add(BigInteger x, BigInteger y) {
         return ModMath.add(x, y, p);
     }
 
     /**
      * Returns x - y mod p
      *
-     * @param x an integer
-     * @param y an integer
+     * @param x an BigIntegereger
+     * @param y an BigIntegereger
      * @return x - y mod p
      */
-    public int subtract(int x, int y) {
+    public BigInteger subtract(BigInteger x, BigInteger y) {
         return ModMath.subtract(x, y, p);
     }
 
     /**
      * Returns x * y mod p
      *
-     * @param x an integer
-     * @param y an integer
+     * @param x an BigIntegereger
+     * @param y an BigIntegereger
      * @return x * y mod p
      */
-    public int multiply(int x, int y) {
+    public BigInteger multiply(BigInteger x, BigInteger y) {
         return ModMath.multiply(x, y, p);
     }
 
@@ -66,8 +68,8 @@ public class FiniteField {
      * @param y an element of the field
      * @return x / y mod p
      */
-    public Integer divide(int x, int y) {
-        Integer inv = ModMath.inverse(y, p);
+    public BigInteger divide(BigInteger x, BigInteger y) {
+        BigInteger inv = ModMath.inverse(y, p);
         if (inv != null)
             return ModMath.multiply(x, inv, p);
         return null;
@@ -76,32 +78,32 @@ public class FiniteField {
     /**
      * Returns x raised to the <code>exponent</code> power, mod p.
      *
-     * @param x        an integer
-     * @param exponent an integer
+     * @param x        an BigIntegereger
+     * @param exponent an BigIntegereger
      * @return x raised to the <code>exponent</code> power, mod p.
      */
-    public int pow(int x, int exponent) {
+    public BigInteger pow(BigInteger x, BigInteger exponent) {
         return ModMath.pow(x, exponent, p);
     }
 
     /**
      * Reduces x so that the result is an element of Zp.
      *
-     * @param x An integer
+     * @param x An BigIntegereger
      * @return an element of Zp.
      */
-    public int reduce(int x) {
+    public BigInteger reduce(BigInteger x) {
         return ModMath.reduce(x, p);
     }
 
     /**
      * Returns true if x and y are congruent modulo n.
      *
-     * @param x An integer
-     * @param y An integer
+     * @param x An BigIntegereger
+     * @param y An BigIntegereger
      * @return true if x and y are congruent modulo n.
      */
-    public boolean isCongruent(int x, int y) {
+    public boolean isCongruent(BigInteger x, BigInteger y) {
         return ModMath.isCongruent(x, y, p);
     }
 
@@ -110,7 +112,7 @@ public class FiniteField {
      *
      * @return the characteristic of the field.
      */
-    public int getCharacteristic() {
+    public BigInteger getCharacteristic() {
         return p;
     }
 }

@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.stardust.math.AffineCoordinates;
 import org.stardust.math.FiniteGroupTestHelper;
 
+import java.math.BigInteger;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -18,9 +20,9 @@ public class AffineECGroupTest {
     @Before
     public void init() throws EllipticCurveException {
         // TODO specify g and n
-        ECParameters params = new ECParameters(61, -1, 0, 0, 0);
+        ECParameters params = new ECParameters(BigInteger.valueOf(61), BigInteger.valueOf(-1), BigInteger.ZERO, null, null);
         this.G = new AffineECGroup(params);
-        this.helper = new FiniteGroupTestHelper<AffineCoordinates>(G);
+        this.helper = new FiniteGroupTestHelper<>(G);
     }
 
     @Test

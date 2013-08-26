@@ -18,22 +18,22 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
     private final FiniteField field;
 
     public AffineECGroup(ECParameters params) throws EllipticCurveException {
-        if (params.getP() <= 3)
+        if (params.getP().compareTo(val(3)) <= 0)
             throw new IllegalArgumentException("field characteristic cannot be less than or equal to 3");
         this.params = params;
         this.field = new FiniteField(params.getP());
-        if (field.isCongruent(getDiscriminant().intValue(), 0))
+        if (field.isCongruent(getDiscriminant(), BigInteger.ZERO))
             throw new EllipticCurveException("invalid discriminant");
     }
 
     @Override
-    public int getGroupOrder() {
-        return 0; //To change body of implemented methods use File | Settings | File Templates.
+    public BigInteger getGroupOrder() {
+        return null; //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public int getOrder(AffineCoordinates a) {
-        return 0; //To change body of implemented methods use File | Settings | File Templates.
+    public BigInteger getOrder(AffineCoordinates a) {
+        return null; //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -43,6 +43,28 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
 
     /**
      * {@inheritDoc}
+     * <p/>
+     * To an arbitrary pair of elliptic curve points P and Q specified by
+     * their affine coordinates P=(x1,y1) and Q=(x2,y2), the group operation
+     * assigns a third point R = P*Q with the coordinates (x3,y3).  These
+     * coordinates are computed as follows:
+     * <p/>
+     * <tt>
+     * if P is (@,@),
+     * R = Q
+     * else if Q is (@,@),
+     * R = P
+     * else if P is not equal to Q and x1 is equal to x2,
+     * R = (@,@)
+     * else if P is not equal to Q and x1 is not equal to x2,
+     * x3 = ((y2-y1)/(x2-x1))^2 - x1 - x2 mod p and
+     * y3 = (x1-x3)*(y2-y1)/(x2-x1) - y1 mod p
+     * else if P is equal to Q and y1 is equal to 0,
+     * R = (@,@)
+     * else    // P is equal to Q and y1 is not equal to 0
+     * x3 = ((3*x1^2 + a)/(2*y1))^2 - 2*x1 mod p and
+     * y3 = (x1-x3)*(3*x1^2 + a)/(2*y1) - y1 mod p.
+     * </tt>
      *
      * @param p a point on the elliptic curve
      * @param q a point on the elliptic curve
@@ -53,21 +75,27 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
         if (!isElement(p) || !isElement(q))
             throw new IllegalArgumentException("invalid point in group operation");
 
+        BigInteger x1 = p.getX();
+        BigInteger y1 = p.getY();
+        BigInteger x2 = q.getX();
+        BigInteger y2 = q.getY();
         if (POINT_AT_INFINITY.equals(p))
             return q;
         else if (POINT_AT_INFINITY.equals(q))
             return p;
-        else if (!p.equals(q) && p.getX() == q.getX())
+        else if (!p.equals(q) && x1.equals(x2))
             return POINT_AT_INFINITY;
-        else if (!p.equals(q) && p.getX() != q.getX()) {
-            int x3 = field.pow((q.getY() - p.getY()) / (q.getX() - p.getX()), 2) - p.getX() - q.getX();
-            int y3 = (p.getX() - x3) * (q.getY() - p.getY()) / (q.getX() - p.getX()) - p.getY();
+        else if (!p.equals(q) && !x1.equals(x2)) {
+            BigInteger x3 = (y2.subtract(y1).divide(x2.subtract(x1))).pow(2).subtract(x1).subtract(x2);
+            BigInteger y3 = (x1.subtract(x3)).multiply(y2.subtract(y1)).divide(x2.subtract(x1)).subtract(y1);
             return new AffineCoordinates(field.reduce(x3), field.reduce(y3));
-        } else if (p.equals(q) && p.getY() == 0)
+        } else if (p.equals(q) && y1.equals(BigInteger.ZERO))
             return POINT_AT_INFINITY;
         else {
-            int x3 = field.pow((3 * p.getX() * p.getX() + params.getA()) / (2 * p.getY()), 2) - 2 * p.getX();
-            int y3 = (p.getX() - x3) * (3 * p.getX() * p.getX() + params.getA()) / (2 * p.getY()) - p.getY();
+            BigInteger x3 = ((val(3).multiply(x1.pow(2)).add(params.getA())).divide(val(2).multiply(y1))).pow(2)
+                    .subtract(val(2).multiply(x1));
+            BigInteger y3 = (x1.subtract(x3)).multiply(val(3).multiply(x1.pow(2)).add(params.getA()))
+                    .divide(val(2).multiply(y1)).subtract(y1);
             return new AffineCoordinates(field.reduce(x3), field.reduce(y3));
         }
     }
@@ -94,8 +122,7 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
     public AffineCoordinates getInverse(AffineCoordinates a) {
         if (POINT_AT_INFINITY.equals(a))
             return POINT_AT_INFINITY;
-        // TODO
-        return null;
+        return new AffineCoordinates(a.getX(), a.getY().negate());
     }
 
     /**
@@ -108,7 +135,7 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
     public boolean isElement(AffineCoordinates p) {
         if (POINT_AT_INFINITY.equals(p))
             return true;
-        return field.pow(p.getY(), 2) == field.pow(p.getX(), 3) + params.getA() * p.getX() + params.getB();
+        return p.getY().pow(2).equals(p.getX().pow(3).add(params.getA().multiply(p.getX())).add(params.getB()));
     }
 
     /**
@@ -116,6 +143,10 @@ public class AffineECGroup implements ECGroup<AffineCoordinates> {
      */
     @Override
     public BigInteger getDiscriminant() {
-        return BigInteger.valueOf(field.reduce(-16 * (4 * field.pow(params.getA(), 3) + 27 * field.pow(params.getB(), 2))));
+        return val(-16).multiply(val(4).multiply(params.getA().pow(3)).add(val(27).multiply(params.getB().pow(2))));
+    }
+
+    private BigInteger val(long x) {
+        return BigInteger.valueOf(x);
     }
 }
