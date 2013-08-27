@@ -8,7 +8,7 @@ import java.math.BigInteger;
 /**
  * Homogeneous coordinates.
  */
-public class HomogeneousCoordinates implements Coordinates {
+public class ProjectiveCoordinates implements Coordinates {
 
     private final BigInteger x;
 
@@ -16,13 +16,13 @@ public class HomogeneousCoordinates implements Coordinates {
 
     private final BigInteger z;
 
-    public HomogeneousCoordinates(int x, int y, int z) {
+    public ProjectiveCoordinates(int x, int y, int z) {
         this.x = BigInteger.valueOf(x);
         this.y = BigInteger.valueOf(y);
         this.z = BigInteger.valueOf(z);
     }
 
-    public HomogeneousCoordinates(BigInteger x, BigInteger y, BigInteger z) {
+    public ProjectiveCoordinates(BigInteger x, BigInteger y, BigInteger z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -30,8 +30,8 @@ public class HomogeneousCoordinates implements Coordinates {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof HomogeneousCoordinates) {
-            HomogeneousCoordinates coords = (HomogeneousCoordinates) obj;
+        if (obj instanceof ProjectiveCoordinates) {
+            ProjectiveCoordinates coords = (ProjectiveCoordinates) obj;
             return new EqualsBuilder().append(getX(), coords.getX())
                     .append(getY(), coords.getY()).append(getZ(), coords.getZ()).isEquals();
         }

@@ -11,11 +11,11 @@ import static org.junit.Assert.assertEquals;
  * Time: 10:49 PM
  * To change this template use File | Settings | File Templates.
  */
-public class HomogeneousCoordinatesTest {
+public class ProjectiveCoordinatesTest {
     @Test
     public void testEquals() {
-        HomogeneousCoordinates p1 = new HomogeneousCoordinates(0, 1, 1);
-        HomogeneousCoordinates p2 = new HomogeneousCoordinates(0, 1, 1);
+        ProjectiveCoordinates p1 = new ProjectiveCoordinates(0, 1, 1);
+        ProjectiveCoordinates p2 = new ProjectiveCoordinates(0, 1, 1);
         assertEquals(p1, p2);
     }
 }

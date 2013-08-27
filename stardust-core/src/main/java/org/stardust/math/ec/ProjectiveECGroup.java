@@ -5,19 +5,21 @@ import org.stardust.math.*;
 import java.math.BigInteger;
 
 /**
- * An elliptic curve group using affine coordinates.
+ * An elliptic curve group using homogeneous coordinates.
  */
-public class AffineECGroup extends ECGroup<AffineCoordinates> {
+public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
 
-    public static final AffineCoordinates POINT_AT_INFINITY = new AffineCoordinates(null, null);
+    public static final ProjectiveCoordinates POINT_AT_INFINITY = new ProjectiveCoordinates(1, 1, 0);
 
     private final ECParameters params;
-
     private final FiniteField field;
+    private final CoordinatesConverter converter;
 
-    private CoordinatesConverter converter;
-
-    public AffineECGroup(ECParameters params) throws EllipticCurveException {
+    /**
+     * @param params
+     * @throws EllipticCurveException
+     */
+    public ProjectiveECGroup(ECParameters params) throws EllipticCurveException {
         super(params);
         if (params.getP().compareTo(val(3)) <= 0)
             throw new IllegalArgumentException("field characteristic cannot be less than or equal to 3");
@@ -25,7 +27,7 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
         this.field = new FiniteField(params.getP());
         if (field.isCongruent(getDiscriminant(), BigInteger.ZERO))
             throw new EllipticCurveException("invalid discriminant");
-        this.converter = new CoordinatesConverter();
+        converter = new CoordinatesConverter();
     }
 
     /**
@@ -37,13 +39,13 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
     }
 
     @Override
-    public BigInteger getOrder(AffineCoordinates a) {
-        return null; //To change body of implemented methods use File | Settings | File Templates.
+    public BigInteger getOrder(ProjectiveCoordinates a) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public FiniteGroup<AffineCoordinates> getCyclicSubgroup(AffineCoordinates a) {
-        return null; //To change body of implemented methods use File | Settings | File Templates.
+    public FiniteGroup<ProjectiveCoordinates> getCyclicSubgroup(ProjectiveCoordinates a) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -54,17 +56,16 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      * @return the result of the group operation
      */
     @Override
-    public AffineCoordinates add(AffineCoordinates s, AffineCoordinates t) {
+    public ProjectiveCoordinates add(ProjectiveCoordinates s, ProjectiveCoordinates t) {
         if (!isElement(s) || !isElement(t))
             throw new IllegalArgumentException("invalid point in group operation");
 
-        ProjectiveCoordinates res = ecFullAdd(converter.convert(s), converter.convert(t));
-        return converter.convert(res, params.getP());
+        return ecFullAdd(s, t);
     }
 
     @Override
-    public AffineCoordinates multiply(AffineCoordinates a, BigInteger n) {
-        return null; //To change body of implemented methods use File | Settings | File Templates.
+    public ProjectiveCoordinates multiply(ProjectiveCoordinates a, BigInteger n) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -73,7 +74,7 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      * @return the point at infinity.
      */
     @Override
-    public AffineCoordinates getIdentity() {
+    public ProjectiveCoordinates getIdentity() {
         return POINT_AT_INFINITY;
     }
 
@@ -81,10 +82,11 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      * {@inheritDoc}
      */
     @Override
-    public AffineCoordinates getInverse(AffineCoordinates a) {
+    public ProjectiveCoordinates getInverse(ProjectiveCoordinates a) {
         if (POINT_AT_INFINITY.equals(a))
             return POINT_AT_INFINITY;
-        return new AffineCoordinates(a.getX(), a.getY().negate());
+        // TODO
+        return null;
     }
 
     /**
@@ -94,9 +96,10 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      * @return true if the given point satisfies the curve equation; false otherwise.
      */
     @Override
-    public boolean isElement(AffineCoordinates p) {
-        if (POINT_AT_INFINITY.equals(p))
+    public boolean isElement(ProjectiveCoordinates q) {
+        if (POINT_AT_INFINITY.equals(q))
             return true;
+        AffineCoordinates p = converter.convert(q, params.getP());
         BigInteger t = p.getX().pow(3).add(params.getA().multiply(p.getX())).add(params.getB());
         return field.isCongruent(p.getY().pow(2), t);
     }

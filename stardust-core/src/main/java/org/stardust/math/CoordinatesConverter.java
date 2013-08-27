@@ -1,5 +1,8 @@
 package org.stardust.math;
 
+import org.stardust.math.ec.AffineECGroup;
+import org.stardust.math.ec.ProjectiveECGroup;
+
 import java.math.BigInteger;
 
 /**
@@ -7,19 +10,19 @@ import java.math.BigInteger;
  */
 public class CoordinatesConverter {
 
-    public boolean isEqual(AffineCoordinates p, HomogeneousCoordinates q, BigInteger order) {
-        BigInteger zInverse = ModMath.inverse(q.getZ(), order);
-        return (p.getX().equals(ModMath.multiply(q.getX(), zInverse, order)))
-                && (p.getY().equals(ModMath.multiply(q.getY(), zInverse, order)));
+    public ProjectiveCoordinates convert(AffineCoordinates p) {
+        if (AffineECGroup.POINT_AT_INFINITY.equals(p))
+            return ProjectiveECGroup.POINT_AT_INFINITY;
+        return new ProjectiveCoordinates(p.getX(), p.getY(), BigInteger.ONE);
     }
 
-    public HomogeneousCoordinates convert(AffineCoordinates p) {
-        return new HomogeneousCoordinates(p.getX(), p.getY(), BigInteger.ONE);
-    }
-
-    public AffineCoordinates convert(HomogeneousCoordinates p, BigInteger order) {
+    public AffineCoordinates convert(ProjectiveCoordinates p, BigInteger order) {
+        if (BigInteger.ZERO.equals(p.getZ()))
+            return AffineECGroup.POINT_AT_INFINITY;
         BigInteger zInverse = ModMath.inverse(p.getZ(), order);
-        return new AffineCoordinates(ModMath.multiply(p.getX(), zInverse, order),
-                ModMath.multiply(p.getY(), zInverse, order));
+        if (zInverse != null)
+            return new AffineCoordinates(ModMath.multiply(p.getX(), zInverse.pow(2), order),
+                    ModMath.multiply(p.getY(), zInverse.pow(3), order));
+        return null;
     }
 }
