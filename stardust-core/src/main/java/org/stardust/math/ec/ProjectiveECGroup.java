@@ -13,7 +13,6 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
 
     private final ECParameters params;
     private final FiniteField field;
-    private final CoordinatesConverter converter;
 
     /**
      * @param params
@@ -27,7 +26,6 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
         this.field = new FiniteField(params.getP());
         if (field.isCongruent(getDiscriminant(), BigInteger.ZERO))
             throw new EllipticCurveException("invalid discriminant");
-        converter = new CoordinatesConverter();
     }
 
     /**
@@ -92,14 +90,14 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
     /**
      * Returns true if the given point satisfies the curve equation.
      *
-     * @param p A point
+     * @param q A point
      * @return true if the given point satisfies the curve equation; false otherwise.
      */
     @Override
     public boolean isElement(ProjectiveCoordinates q) {
         if (POINT_AT_INFINITY.equals(q))
             return true;
-        AffineCoordinates p = converter.convert(q, params.getP());
+        AffineCoordinates p = ecAffinify(q);
         BigInteger t = p.getX().pow(3).add(params.getA().multiply(p.getX())).add(params.getB());
         return field.isCongruent(p.getY().pow(2), t);
     }

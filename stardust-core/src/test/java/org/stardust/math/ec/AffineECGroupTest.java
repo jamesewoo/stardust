@@ -27,7 +27,7 @@ public class AffineECGroupTest {
         BigInteger gx = new BigInteger("188da80e b03090f6 7cbf20eb 43a18800 f4ff0afd 82ff1012".replace(" ", ""), 16);
         BigInteger gy = new BigInteger("07192b95 ffc8da78 631011ed 6b24cdd5 73f977a1 1e794811".replace(" ", ""), 16);
         BigInteger q = new BigInteger("ffffffff ffffffff ffffffff 99def836 146bc9b1 b4d22831".replace(" ", ""), 16);
-        ECParameters params = new ECParameters(p, a, b, new AffineCoordinates(gx, gy), q);
+        ECParameters<AffineCoordinates> params = new ECParameters<>(p, a, b, new AffineCoordinates(gx, gy), q);
         this.G = new AffineECGroup(params);
         this.helper = new FiniteGroupTestHelper<>(G);
     }

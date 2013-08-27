@@ -15,8 +15,6 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
 
     private final FiniteField field;
 
-    private CoordinatesConverter converter;
-
     public AffineECGroup(ECParameters params) throws EllipticCurveException {
         super(params);
         if (params.getP().compareTo(val(3)) <= 0)
@@ -25,7 +23,6 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
         this.field = new FiniteField(params.getP());
         if (field.isCongruent(getDiscriminant(), BigInteger.ZERO))
             throw new EllipticCurveException("invalid discriminant");
-        this.converter = new CoordinatesConverter();
     }
 
     /**
@@ -58,8 +55,8 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
         if (!isElement(s) || !isElement(t))
             throw new IllegalArgumentException("invalid point in group operation");
 
-        ProjectiveCoordinates res = ecFullAdd(converter.convert(s), converter.convert(t));
-        return converter.convert(res, params.getP());
+        ProjectiveCoordinates res = ecFullAdd(ecProjectify(s), ecProjectify(t));
+        return ecAffinify(res);
     }
 
     @Override
