@@ -7,12 +7,14 @@ import org.stardust.math.ProjectiveCoordinates;
 
 import java.math.BigInteger;
 
+import static java.math.BigInteger.valueOf;
+
 /**
  * An elliptic curve group.
  */
 public abstract class ECGroup<T> implements FiniteGroup<T> {
 
-    private ECParameters params;
+    private final ECParameters params;
 
     protected ECGroup(ECParameters params) {
         this.params = params;
@@ -53,7 +55,31 @@ public abstract class ECGroup<T> implements FiniteGroup<T> {
 //    }
 
     protected ProjectiveCoordinates ecDouble(ProjectiveCoordinates s) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        if (!ModMath.isCongruent(params.getA(), valueOf(-3), params.getP()))
+            throw new IllegalArgumentException("expected a congruent to -3 mod p");
+        BigInteger t1 = s.getX();
+        BigInteger t2 = s.getY();
+        BigInteger t3 = s.getZ();
+        if (BigInteger.ZERO.equals(t3))
+            return ProjectiveECGroup.POINT_AT_INFINITY;
+        BigInteger t4 = t3.multiply(t3);
+        BigInteger t5 = t1.subtract(t4);
+        t4 = t1.add(t4);
+        t5 = t4.multiply(t5);
+        t4 = valueOf(3).multiply(t5);
+        t3 = t3.multiply(t2);
+        t3 = valueOf(2).multiply(t3);
+        t2 = t2.multiply(t2);
+        t5 = t1.multiply(t2);
+        t5 = valueOf(4).multiply(t5);
+        t1 = t4.multiply(t4);
+        t1 = t1.subtract(valueOf(2).multiply(t5));
+        t2 = t2.multiply(t2);
+        t2 = valueOf(8).multiply(t2);
+        t5 = t5.subtract(t1);
+        t5 = t4.multiply(t5);
+        t2 = t5.subtract(t2);
+        return new ProjectiveCoordinates(t1, t2, t3);
     }
 
     protected ProjectiveCoordinates ecAdd(ProjectiveCoordinates s, ProjectiveCoordinates t) {

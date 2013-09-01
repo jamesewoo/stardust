@@ -4,6 +4,8 @@ import org.stardust.math.*;
 
 import java.math.BigInteger;
 
+import static java.math.BigInteger.valueOf;
+
 /**
  * An elliptic curve group using homogeneous coordinates.
  */
@@ -15,8 +17,10 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
     private final FiniteField field;
 
     /**
-     * @param params
-     * @throws EllipticCurveException
+     * Creates a new elliptic curve using projective coordinates.
+     *
+     * @param params the curve parameters
+     * @throws EllipticCurveException if the discriminant is invalid
      */
     public ProjectiveECGroup(ECParameters params) throws EllipticCurveException {
         super(params);
@@ -111,6 +115,6 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
     }
 
     private BigInteger val(long x) {
-        return BigInteger.valueOf(x);
+        return valueOf(x);
     }
 }

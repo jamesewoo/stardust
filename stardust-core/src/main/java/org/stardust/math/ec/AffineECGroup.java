@@ -4,6 +4,8 @@ import org.stardust.math.*;
 
 import java.math.BigInteger;
 
+import static java.math.BigInteger.valueOf;
+
 /**
  * An elliptic curve group using affine coordinates.
  */
@@ -87,15 +89,15 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
     /**
      * Returns true if the given point satisfies the curve equation.
      *
-     * @param p A point
+     * @param s A point
      * @return true if the given point satisfies the curve equation; false otherwise.
      */
     @Override
-    public boolean isElement(AffineCoordinates p) {
-        if (POINT_AT_INFINITY.equals(p))
+    public boolean isElement(AffineCoordinates s) {
+        if (POINT_AT_INFINITY.equals(s))
             return true;
-        BigInteger t = p.getX().pow(3).add(params.getA().multiply(p.getX())).add(params.getB());
-        return field.isCongruent(p.getY().pow(2), t);
+        BigInteger t = s.getX().pow(3).add(params.getA().multiply(s.getX())).add(params.getB());
+        return field.isCongruent(s.getY().pow(2), t);
     }
 
     /**
@@ -107,6 +109,6 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
     }
 
     private BigInteger val(long x) {
-        return BigInteger.valueOf(x);
+        return valueOf(x);
     }
 }

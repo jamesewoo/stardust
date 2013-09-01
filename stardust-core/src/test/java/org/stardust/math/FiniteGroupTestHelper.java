@@ -10,18 +10,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class FiniteGroupTestHelper<T> extends GroupTestHelper<T> {
 
-    private FiniteGroup<T> G;
+    private final FiniteGroup<T> G;
 
     public FiniteGroupTestHelper(FiniteGroup<T> group) {
         super(group);
         this.G = group;
     }
 
-    public void finiteOrderTest1(T a) {
+    public void testFiniteOrder1(T a) {
         assertEquals(BigInteger.ZERO, G.getGroupOrder().remainder(G.getOrder(a)));
     }
 
-    public void finiteOrderTest2(T a, BigInteger x, BigInteger y, BigInteger m) {
+    public void testFiniteOrder2(T a, BigInteger x, BigInteger y, BigInteger m) {
         BigInteger r = G.getOrder(a);
         assertEquals(G.multiply(a, x), G.multiply(a, x.add(m.multiply(r))));
         if (ModMath.isCongruent(x, y, r)) {
@@ -32,7 +32,7 @@ public class FiniteGroupTestHelper<T> extends GroupTestHelper<T> {
         }
     }
 
-    public void cyclicSubgroupTest1(T a, BigInteger m) {
+    public void testCyclicSubgroup1(T a, BigInteger m) {
         BigInteger r = G.getOrder(a);
         FiniteGroup<T> H = G.getCyclicSubgroup(a);
         assertEquals(r, H.getGroupOrder());
@@ -40,7 +40,7 @@ public class FiniteGroupTestHelper<T> extends GroupTestHelper<T> {
             assertEquals(H, G.getCyclicSubgroup(G.multiply(a, m)));
     }
 
-    public void cyclicSubgroupTest2(T a, BigInteger m, BigInteger n) {
+    public void testCyclicSubgroup2(T a, BigInteger m, BigInteger n) {
         BigInteger r = G.getOrder(a);
         if (m.compareTo(BigInteger.ZERO) >= 0)
             assertEquals(G.multiply(a, m), G.multiply(a, m.add(n.multiply(r))));

@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.math.BigInteger;
 
+import static java.math.BigInteger.valueOf;
+
 /**
  * Affine coordinates.
  */
@@ -15,8 +17,8 @@ public class AffineCoordinates implements Coordinates {
     private final BigInteger y;
 
     public AffineCoordinates(int x, int y) {
-        this.x = BigInteger.valueOf(x);
-        this.y = BigInteger.valueOf(y);
+        this.x = valueOf(x);
+        this.y = valueOf(y);
     }
 
     public AffineCoordinates(BigInteger x, BigInteger y) {

@@ -31,8 +31,8 @@ public class FiniteField {
     /**
      * Returns x + y mod p
      *
-     * @param x an BigIntegereger
-     * @param y an BigIntegereger
+     * @param x an BigInteger
+     * @param y an BigInteger
      * @return x + y mod p
      */
     public BigInteger add(BigInteger x, BigInteger y) {
@@ -42,8 +42,8 @@ public class FiniteField {
     /**
      * Returns x - y mod p
      *
-     * @param x an BigIntegereger
-     * @param y an BigIntegereger
+     * @param x an BigInteger
+     * @param y an BigInteger
      * @return x - y mod p
      */
     public BigInteger subtract(BigInteger x, BigInteger y) {
@@ -53,8 +53,8 @@ public class FiniteField {
     /**
      * Returns x * y mod p
      *
-     * @param x an BigIntegereger
-     * @param y an BigIntegereger
+     * @param x an BigInteger
+     * @param y an BigInteger
      * @return x * y mod p
      */
     public BigInteger multiply(BigInteger x, BigInteger y) {
@@ -78,8 +78,8 @@ public class FiniteField {
     /**
      * Returns x raised to the <code>exponent</code> power, mod p.
      *
-     * @param x        an BigIntegereger
-     * @param exponent an BigIntegereger
+     * @param x        an BigInteger
+     * @param exponent an BigInteger
      * @return x raised to the <code>exponent</code> power, mod p.
      */
     public BigInteger pow(BigInteger x, BigInteger exponent) {
@@ -89,7 +89,7 @@ public class FiniteField {
     /**
      * Reduces x so that the result is an element of Zp.
      *
-     * @param x An BigIntegereger
+     * @param x An BigInteger
      * @return an element of Zp.
      */
     public BigInteger reduce(BigInteger x) {
@@ -99,8 +99,8 @@ public class FiniteField {
     /**
      * Returns true if x and y are congruent modulo n.
      *
-     * @param x An BigIntegereger
-     * @param y An BigIntegereger
+     * @param x An BigInteger
+     * @param y An BigInteger
      * @return true if x and y are congruent modulo n.
      */
     public boolean isCongruent(BigInteger x, BigInteger y) {
