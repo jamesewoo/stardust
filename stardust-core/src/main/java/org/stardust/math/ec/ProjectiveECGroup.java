@@ -58,7 +58,7 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
      * @return the result of the group operation
      */
     @Override
-    public ProjectiveCoordinates add(ProjectiveCoordinates s, ProjectiveCoordinates t) {
+    public ProjectiveCoordinates operate(ProjectiveCoordinates s, ProjectiveCoordinates t) {
         if (!isElement(s) || !isElement(t))
             throw new IllegalArgumentException("invalid point in group operation");
 
@@ -66,7 +66,7 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
     }
 
     @Override
-    public ProjectiveCoordinates multiply(ProjectiveCoordinates a, BigInteger n) {
+    public ProjectiveCoordinates operateN(ProjectiveCoordinates a, BigInteger n) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

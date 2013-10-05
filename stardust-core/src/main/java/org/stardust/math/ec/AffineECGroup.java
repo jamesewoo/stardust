@@ -53,7 +53,7 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      * @return the result of the group operation
      */
     @Override
-    public AffineCoordinates add(AffineCoordinates s, AffineCoordinates t) {
+    public AffineCoordinates operate(AffineCoordinates s, AffineCoordinates t) {
         if (!isElement(s) || !isElement(t))
             throw new IllegalArgumentException("invalid point in group operation");
 
@@ -62,7 +62,7 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
     }
 
     @Override
-    public AffineCoordinates multiply(AffineCoordinates a, BigInteger n) {
+    public AffineCoordinates operateN(AffineCoordinates a, BigInteger n) {
         return null; //To change body of implemented methods use File | Settings | File Templates.
     }
 

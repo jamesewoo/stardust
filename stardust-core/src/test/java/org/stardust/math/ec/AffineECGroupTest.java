@@ -44,7 +44,7 @@ public class AffineECGroupTest {
         AffineCoordinates s = new AffineCoordinates(xs, ys);
         AffineCoordinates t = new AffineCoordinates(xt, yt);
         AffineCoordinates r = new AffineCoordinates(xr, yr);
-        AffineCoordinates res = G.add(s, t);
+        AffineCoordinates res = G.operate(s, t);
         assertEquals(r, res);
     }
 

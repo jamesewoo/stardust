@@ -23,11 +23,11 @@ public class FiniteGroupTestHelper<T> extends GroupTestHelper<T> {
 
     public void testFiniteOrder2(T a, BigInteger x, BigInteger y, BigInteger m) {
         BigInteger r = G.getOrder(a);
-        assertEquals(G.multiply(a, x), G.multiply(a, x.add(m.multiply(r))));
+        assertEquals(G.operateN(a, x), G.operateN(a, x.add(m.multiply(r))));
         if (ModMath.isCongruent(x, y, r)) {
-            assertEquals(G.multiply(a, x), G.multiply(a, y));
+            assertEquals(G.operateN(a, x), G.operateN(a, y));
         }
-        if (G.multiply(a, x).equals(G.multiply(a, y))) {
+        if (G.operateN(a, x).equals(G.operateN(a, y))) {
             assertTrue(ModMath.isCongruent(x, y, r));
         }
     }
@@ -37,12 +37,12 @@ public class FiniteGroupTestHelper<T> extends GroupTestHelper<T> {
         FiniteGroup<T> H = G.getCyclicSubgroup(a);
         assertEquals(r, H.getGroupOrder());
         if (ModMath.isCoprime(m, r))
-            assertEquals(H, G.getCyclicSubgroup(G.multiply(a, m)));
+            assertEquals(H, G.getCyclicSubgroup(G.operateN(a, m)));
     }
 
     public void testCyclicSubgroup2(T a, BigInteger m, BigInteger n) {
         BigInteger r = G.getOrder(a);
         if (m.compareTo(BigInteger.ZERO) >= 0)
-            assertEquals(G.multiply(a, m), G.multiply(a, m.add(n.multiply(r))));
+            assertEquals(G.operateN(a, m), G.operateN(a, m.add(n.multiply(r))));
     }
 }

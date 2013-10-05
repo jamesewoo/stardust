@@ -16,7 +16,7 @@ public interface Group<T> {
      * @param b An element in G
      * @return a third element in G.
      */
-    public T add(T a, T b);
+    public T operate(T a, T b);
 
     /**
      * Returns the result of the group operation applied to <code>a</code> n-1 times.
@@ -25,7 +25,7 @@ public interface Group<T> {
      * @param n An element in G
      * @return the result of the group operation applied to <code>a</code> n-1 times.
      */
-    public T multiply(T a, BigInteger n);
+    public T operateN(T a, BigInteger n);
 
     /**
      * Returns the identity element of G.

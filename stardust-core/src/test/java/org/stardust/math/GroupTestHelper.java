@@ -18,34 +18,34 @@ public class GroupTestHelper<T> {
     }
 
     public T testAdd(T a, T b) {
-        T res = G.add(a, b);
+        T res = G.operate(a, b);
         assertTrue(G.isElement(res));
         return res;
     }
 
     public void testAssociativity(T a, T b, T c) {
-        assertEquals(G.add(G.add(a, b), c), G.add(a, G.add(b, c)));
+        assertEquals(G.operate(G.operate(a, b), c), G.operate(a, G.operate(b, c)));
     }
 
     public void testIdentity(T a) {
-        assertEquals(a, G.add(G.getIdentity(), a));
-        assertEquals(a, G.add(a, G.getIdentity()));
+        assertEquals(a, G.operate(G.getIdentity(), a));
+        assertEquals(a, G.operate(a, G.getIdentity()));
     }
 
     public void testInverse(T a) {
         T b = G.getInverse(a);
-        assertEquals(G.getIdentity(), G.add(a, b));
-        assertEquals(G.getIdentity(), G.add(b, a));
+        assertEquals(G.getIdentity(), G.operate(a, b));
+        assertEquals(G.getIdentity(), G.operate(b, a));
     }
 
     public void testMultiply1(T a, BigInteger x) {
-        assertEquals(G.multiply(G.getInverse(a), x), G.multiply(a, x.negate()));
+        assertEquals(G.operateN(G.getInverse(a), x), G.operateN(a, x.negate()));
     }
 
     public void testMultiply2(T a, BigInteger x, BigInteger y) {
-        assertEquals(G.add(G.multiply(a, x), G.multiply(a, y)), G.multiply(a, x.add(y)));
-        assertEquals(G.multiply(a, x.multiply(y)), G.multiply(G.multiply(a, x), y));
-        assertEquals(G.multiply(a, x.multiply(y)), G.multiply(G.multiply(a, y), x));
+        assertEquals(G.operate(G.operateN(a, x), G.operateN(a, y)), G.operateN(a, x.add(y)));
+        assertEquals(G.operateN(a, x.multiply(y)), G.operateN(G.operateN(a, x), y));
+        assertEquals(G.operateN(a, x.multiply(y)), G.operateN(G.operateN(a, y), x));
     }
 
 }
