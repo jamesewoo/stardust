@@ -5,7 +5,7 @@ import java.math.BigInteger;
 /**
  * A finite field with prime characteristic.
  */
-public class FiniteField {
+public class FiniteField implements Field<BigInteger> {
 
     private final BigInteger p;
 
@@ -40,17 +40,6 @@ public class FiniteField {
     }
 
     /**
-     * Returns x - y mod p
-     *
-     * @param x an BigInteger
-     * @param y an BigInteger
-     * @return x - y mod p
-     */
-    public BigInteger subtract(BigInteger x, BigInteger y) {
-        return ModMath.subtract(x, y, p);
-    }
-
-    /**
      * Returns x * y mod p
      *
      * @param x an BigInteger
@@ -61,18 +50,24 @@ public class FiniteField {
         return ModMath.multiply(x, y, p);
     }
 
-    /**
-     * Returns x times the inverse of y mod p.
-     *
-     * @param x an element of the field
-     * @param y an element of the field
-     * @return x / y mod p
-     */
-    public BigInteger divide(BigInteger x, BigInteger y) {
-        BigInteger inv = ModMath.inverse(y, p);
-        if (inv != null)
-            return ModMath.multiply(x, inv, p);
-        return null;
+    @Override
+    public BigInteger getAdditiveIdentity() {
+        return BigInteger.ZERO;
+    }
+
+    @Override
+    public BigInteger getMultiplicativeIdentity() {
+        return BigInteger.ONE;
+    }
+
+    @Override
+    public BigInteger getAdditiveInverse(BigInteger a) {
+        return a.negate();
+    }
+
+    @Override
+    public BigInteger getMultiplicativeInverse(BigInteger a) {
+        return a.modInverse(p);
     }
 
     /**

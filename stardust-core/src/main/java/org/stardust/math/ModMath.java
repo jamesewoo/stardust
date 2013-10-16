@@ -140,17 +140,7 @@ public class ModMath {
      * @return x raised to the <code>exponent</code> power, mod q.
      */
     public static Integer pow(int x, int exponent, int q) {
-        if (q < 1)
-            throw new ArithmeticException("q cannot be less than 1");
-        int res = 1;
-        for (int i = 1; i <= Math.abs(exponent); ++i) {
-            res *= x;
-        }
-        res = reduce(res, q);
-        if (exponent >= 0)
-            return res;
-        else
-            return inverse(res, q);
+        return pow(valueOf(x), valueOf(exponent), valueOf(q)).intValue();
     }
 
     /**
@@ -162,12 +152,7 @@ public class ModMath {
      * @return true if x and y are congruent modulo n.
      */
     public static boolean isCongruent(BigInteger x, BigInteger y, BigInteger n) {
-        if (n.compareTo(BigInteger.ZERO) <= 0)
-            throw new ArithmeticException("q cannot be less or equal to 0");
-        if (x.compareTo(y) >= 0)
-            return (x.subtract(y)).remainder(n).equals(BigInteger.ZERO);
-        else
-            return (y.subtract(x)).remainder(n).equals(BigInteger.ZERO);
+        return BigInteger.ZERO.equals(x.subtract(y).mod(n));
     }
 
     /**
@@ -178,7 +163,7 @@ public class ModMath {
      * @return true if x and y are coprime.
      */
     public static boolean isCoprime(BigInteger x, BigInteger y) {
-        return gcd(x, y).equals(BigInteger.ONE);
+        return BigInteger.ONE.equals(gcd(x, y));
     }
 
     /**
