@@ -14,7 +14,7 @@ public class GroupVerifier<T> {
         this.G = group;
     }
 
-    public boolean checkClosure(T a, T b) throws GroupException {
+    public boolean checkClosure(T a, T b) {
         if (G.contains(a) && G.contains(b)) {
             return G.contains(G.operate(a, b));
         } else {
@@ -22,7 +22,7 @@ public class GroupVerifier<T> {
         }
     }
 
-    public boolean checkAssociativity(T a, T b, T c) throws GroupException {
+    public boolean checkAssociativity(T a, T b, T c) {
         if (G.contains(a) && G.contains(b) && G.contains(c)) {
             return G.operate(G.operate(a, b), c)
                     .equals(G.operate(a, G.operate(b, c)));
@@ -31,7 +31,7 @@ public class GroupVerifier<T> {
         }
     }
 
-    public boolean checkIdentity(T a) throws GroupException {
+    public boolean checkIdentity(T a) {
         if (G.contains(a)) {
             T e = G.getIdentity();
             return G.contains(e)
@@ -42,7 +42,7 @@ public class GroupVerifier<T> {
         }
     }
 
-    public boolean checkInverse(T a) throws GroupException {
+    public boolean checkInverse(T a) {
         if (G.contains(a)) {
             T aInv = G.getInverse(a);
             T e = G.getIdentity();

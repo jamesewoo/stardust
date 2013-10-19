@@ -67,7 +67,7 @@ public class IntegersModNTest {
     }
 
     @Test
-    public void testGroupProperties() throws GroupException {
+    public void testGroupProperties() {
         IntegersModN zModN = new IntegersModN(3);
         AbelianGroupVerifier<BigInteger> verifier = new AbelianGroupVerifier<>(zModN);
         int[] elements = new int[]{0, 1, 2};

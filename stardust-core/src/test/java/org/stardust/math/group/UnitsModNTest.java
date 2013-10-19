@@ -42,13 +42,13 @@ public class UnitsModNTest {
         assertEquals(ONE, units.operate(7, 7));
     }
 
-    @Test(expected = ArithmeticException.class)
+    @Test(expected = GroupException.class)
     public void testOperateOnInvalidElement1() {
         UnitsModN units = new UnitsModN(8);
         units.operate(8, 1);
     }
 
-    @Test(expected = ArithmeticException.class)
+    @Test(expected = GroupException.class)
     public void testOperateOnInvalidElement2() {
         UnitsModN units = new UnitsModN(8);
         units.operate(1, 8);
@@ -76,7 +76,7 @@ public class UnitsModNTest {
     }
 
     @Test
-    public void testGroupProperties() throws GroupException {
+    public void testGroupProperties() {
         UnitsModN units = new UnitsModN(8);
         AbelianGroupVerifier<BigInteger> verifier = new AbelianGroupVerifier<>(units);
         int[] elements = new int[]{1, 3, 5, 7};

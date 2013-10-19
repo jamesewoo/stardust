@@ -42,12 +42,14 @@ public class UnitsModN implements Group<BigInteger> {
     @Override
     public BigInteger operate(BigInteger a, BigInteger b) {
         if (!contains(a) || !contains(b))
-            throw new ArithmeticException("input elements must be relatively prime to modulus");
+            throw new GroupException("a and b must be elements of the group");
         return a.multiply(b).mod(modulus);
     }
 
     @Override
     public BigInteger operateN(BigInteger a, BigInteger n) {
+        if (!contains(a))
+            throw new GroupException("a must be an element of the group");
         return a.modPow(n, modulus);
     }
 
@@ -58,6 +60,8 @@ public class UnitsModN implements Group<BigInteger> {
 
     @Override
     public BigInteger getInverse(BigInteger a) {
+        if (!contains(a))
+            throw new GroupException("a must be an element of the group");
         return a.modInverse(modulus);
     }
 

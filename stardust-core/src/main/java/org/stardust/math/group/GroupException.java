@@ -6,7 +6,7 @@ package org.stardust.math.group;
  * Date: 10/19/13
  * Time: 1:39 PM
  */
-public class GroupException extends Exception {
+public class GroupException extends RuntimeException {
 
     public GroupException() {
         super();

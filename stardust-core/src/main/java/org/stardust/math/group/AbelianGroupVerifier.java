@@ -15,7 +15,7 @@ public class AbelianGroupVerifier<T> extends GroupVerifier<T> {
         this.G = group;
     }
 
-    public boolean checkCommutativity(T a, T b) throws GroupException {
+    public boolean checkCommutativity(T a, T b) {
         if (G.contains(a) && G.contains(b)) {
             return G.operate(a, b).equals(G.operate(b, a));
         } else {
