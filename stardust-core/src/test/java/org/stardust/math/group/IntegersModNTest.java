@@ -18,14 +18,16 @@ public class IntegersModNTest {
 
     @Test
     public void testOperate() {
-        IntegersModN zModN = new IntegersModN(valueOf(3));
+        IntegersModN zModN = new IntegersModN(3);
 
         assertEquals(ZERO, zModN.operate(0, 0));
         assertEquals(ONE, zModN.operate(0, 1));
         assertEquals(valueOf(2), zModN.operate(0, 2));
+
         assertEquals(ONE, zModN.operate(1, 0));
         assertEquals(valueOf(2), zModN.operate(1, 1));
         assertEquals(ZERO, zModN.operate(1, 2));
+
         assertEquals(valueOf(2), zModN.operate(2, 0));
         assertEquals(ZERO, zModN.operate(2, 1));
         assertEquals(ONE, zModN.operate(2, 2));
@@ -41,20 +43,45 @@ public class IntegersModNTest {
     }
 
     @Test
-    public void testGroupConditions() {
+    public void testOperateN() {
         IntegersModN zModN = new IntegersModN(3);
-        GroupVerifier<BigInteger> verifier = new GroupVerifier<>(zModN);
+
+        assertEquals(ZERO, zModN.operateN(0, 0));
+        assertEquals(ZERO, zModN.operateN(0, 1));
+        assertEquals(ZERO, zModN.operateN(0, 2));
+
+        assertEquals(ZERO, zModN.operateN(1, 0));
+        assertEquals(ONE, zModN.operateN(1, 1));
+        assertEquals(valueOf(2), zModN.operateN(1, 2));
+        assertEquals(ZERO, zModN.operateN(1, 3));
+
+        assertEquals(ZERO, zModN.operateN(2, 0));
+        assertEquals(valueOf(2), zModN.operateN(2, 1));
+        assertEquals(ONE, zModN.operateN(2, 2));
+        assertEquals(ZERO, zModN.operateN(2, 3));
+
+        // test element 3, which is congruent to 0 (mod 3)
+        assertEquals(ZERO, zModN.operateN(3, 0));
+        assertEquals(ZERO, zModN.operateN(3, 1));
+        assertEquals(ZERO, zModN.operateN(3, 2));
+    }
+
+    @Test
+    public void testGroupProperties() throws GroupException {
+        IntegersModN zModN = new IntegersModN(3);
+        AbelianGroupVerifier<BigInteger> verifier = new AbelianGroupVerifier<>(zModN);
         int[] elements = new int[]{0, 1, 2};
 
         for (int i : elements) {
+            assertTrue(verifier.checkIdentity(valueOf(i)));
+            assertTrue(verifier.checkInverse(valueOf(i)));
             for (int j : elements) {
                 assertTrue(verifier.checkClosure(valueOf(i), valueOf(j)));
+                assertTrue(verifier.checkCommutativity(valueOf(i), valueOf(j)));
                 for (int k : elements) {
                     assertTrue(verifier.checkAssociativity(valueOf(i), valueOf(j), valueOf(k)));
                 }
             }
-            assertTrue(verifier.checkIdentity(valueOf(i)));
-            assertTrue(verifier.checkInverse(valueOf(i)));
         }
     }
 }
