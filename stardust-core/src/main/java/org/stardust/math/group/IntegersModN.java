@@ -13,7 +13,7 @@ import static java.math.BigInteger.valueOf;
  */
 public class IntegersModN implements Group<BigInteger> {
 
-    private BigInteger modulus;
+    private final BigInteger modulus;
 
     public IntegersModN(Integer modulus) {
         this(valueOf(modulus));
