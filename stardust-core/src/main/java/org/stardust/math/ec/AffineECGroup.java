@@ -1,6 +1,8 @@
 package org.stardust.math.ec;
 
-import org.stardust.math.*;
+import org.stardust.math.FiniteField;
+import org.stardust.math.coords.AffineCoordinates;
+import org.stardust.math.coords.ProjectiveCoordinates;
 
 import java.math.BigInteger;
 
@@ -29,24 +31,6 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
 
     /**
      * {@inheritDoc}
-     */
-    @Override
-    public BigInteger getGroupOrder() {
-        return params.getQ();
-    }
-
-    @Override
-    public BigInteger getOrder(AffineCoordinates a) {
-        return null; //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public FiniteGroup<AffineCoordinates> getCyclicSubgroup(AffineCoordinates a) {
-        return null; //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    /**
-     * {@inheritDoc}
      *
      * @param s a point on the elliptic curve
      * @param t a point on the elliptic curve
@@ -54,7 +38,7 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      */
     @Override
     public AffineCoordinates operate(AffineCoordinates s, AffineCoordinates t) {
-        if (!isElement(s) || !isElement(t))
+        if (!contains(s) || !contains(t))
             throw new IllegalArgumentException("invalid point in group operation");
 
         ProjectiveCoordinates res = ecFullAdd(ecProjectify(s), ecProjectify(t));
@@ -93,7 +77,7 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
      * @return true if the given point satisfies the curve equation; false otherwise.
      */
     @Override
-    public boolean isElement(AffineCoordinates s) {
+    public boolean contains(AffineCoordinates s) {
         if (POINT_AT_INFINITY.equals(s))
             return true;
         BigInteger t = s.getX().pow(3).add(params.getA().multiply(s.getX())).add(params.getB());

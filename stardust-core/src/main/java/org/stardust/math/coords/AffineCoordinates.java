@@ -1,4 +1,4 @@
-package org.stardust.math;
+package org.stardust.math.coords;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -8,41 +8,37 @@ import java.math.BigInteger;
 import static java.math.BigInteger.valueOf;
 
 /**
- * Homogeneous coordinates.
+ * Affine coordinates.
  */
-public class ProjectiveCoordinates implements Coordinates {
+public class AffineCoordinates implements Coordinates {
 
     private final BigInteger x;
 
     private final BigInteger y;
 
-    private final BigInteger z;
-
-    public ProjectiveCoordinates(int x, int y, int z) {
+    public AffineCoordinates(int x, int y) {
         this.x = valueOf(x);
         this.y = valueOf(y);
-        this.z = valueOf(z);
     }
 
-    public ProjectiveCoordinates(BigInteger x, BigInteger y, BigInteger z) {
+    public AffineCoordinates(BigInteger x, BigInteger y) {
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ProjectiveCoordinates) {
-            ProjectiveCoordinates coords = (ProjectiveCoordinates) obj;
+        if (obj instanceof AffineCoordinates) {
+            AffineCoordinates coords = (AffineCoordinates) obj;
             return new EqualsBuilder().append(getX(), coords.getX())
-                    .append(getY(), coords.getY()).append(getZ(), coords.getZ()).isEquals();
+                    .append(getY(), coords.getY()).isEquals();
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(x).append(y).append(z).toHashCode();
+        return new HashCodeBuilder().append(x).append(y).toHashCode();
     }
 
     public BigInteger getX() {
@@ -53,7 +49,4 @@ public class ProjectiveCoordinates implements Coordinates {
         return y;
     }
 
-    public BigInteger getZ() {
-        return z;
-    }
 }

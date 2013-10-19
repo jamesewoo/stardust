@@ -1,4 +1,4 @@
-package org.stardust.math;
+package org.stardust.math.group;
 
 import java.math.BigInteger;
 
@@ -48,6 +48,6 @@ public interface Group<T> {
      * @param a An element
      * @return true if <code>a</code> is an element of G; false otherwise
      */
-    public boolean isElement(T a);
+    public boolean contains(T a);
 
 }

@@ -1,4 +1,4 @@
 stardust
 ========
 
-A collection of ideas associated with elliptic curves.
+A simple math library dealing with abstract algebra.

@@ -1,9 +1,9 @@
 package org.stardust.math.ec;
 
-import org.stardust.math.AffineCoordinates;
-import org.stardust.math.FiniteGroup;
 import org.stardust.math.ModMath;
-import org.stardust.math.ProjectiveCoordinates;
+import org.stardust.math.coords.AffineCoordinates;
+import org.stardust.math.coords.ProjectiveCoordinates;
+import org.stardust.math.group.Group;
 
 import java.math.BigInteger;
 
@@ -12,7 +12,7 @@ import static java.math.BigInteger.valueOf;
 /**
  * An elliptic curve group.
  */
-public abstract class ECGroup<T> implements FiniteGroup<T> {
+public abstract class ECGroup<T> implements Group<T> {
 
     private final ECParameters params;
 
@@ -37,9 +37,9 @@ public abstract class ECGroup<T> implements FiniteGroup<T> {
         if (BigInteger.ZERO.equals(s.getZ()))
             return AffineECGroup.POINT_AT_INFINITY;
         BigInteger zInverse = ModMath.inverse(s.getZ(), params.getP());
-        if (zInverse != null)
-            return new AffineCoordinates(ModMath.multiply(s.getX(), zInverse.pow(2), params.getP()),
-                    ModMath.multiply(s.getY(), zInverse.pow(3), getGroupOrder()));
+//        if (zInverse != null)
+//            return new AffineCoordinates(ModMath.multiply(s.getX(), zInverse.pow(2), params.getP()),
+//                    ModMath.multiply(s.getY(), zInverse.pow(3), getGroupOrder())); // TODO define group order
         return null;
     }
 
