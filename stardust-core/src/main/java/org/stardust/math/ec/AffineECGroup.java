@@ -1,6 +1,6 @@
 package org.stardust.math.ec;
 
-import org.stardust.math.FiniteField;
+import org.stardust.math.field.FiniteField;
 import org.stardust.math.coords.AffineCoordinates;
 import org.stardust.math.coords.ProjectiveCoordinates;
 

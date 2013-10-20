@@ -52,4 +52,25 @@ public class GroupVerifier<T> {
             throw new GroupException("a must be an element of G");
         }
     }
+
+    public boolean verifyAll(Iterable<T> elements) {
+        for (T i : elements) {
+            if (!checkIdentity(i))
+                throw new GroupException("identity check failed");
+
+            if (!checkInverse(i))
+                throw new GroupException("inverse check failed");
+
+            for (T j : elements) {
+                if (!checkClosure(i, j))
+                    throw new GroupException("closure check failed");
+
+                for (T k : elements) {
+                    if (!checkAssociativity(i, j, k))
+                        throw new GroupException("associativity check failed");
+                }
+            }
+        }
+        return true;
+    }
 }

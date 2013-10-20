@@ -1,4 +1,6 @@
-package org.stardust.math;
+package org.stardust.math.field;
+
+import org.stardust.math.ModMath;
 
 import java.math.BigInteger;
 

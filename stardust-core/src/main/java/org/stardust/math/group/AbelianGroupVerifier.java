@@ -22,4 +22,28 @@ public class AbelianGroupVerifier<T> extends GroupVerifier<T> {
             throw new GroupException("a and b must be elements of G");
         }
     }
+
+    public boolean verifyAll(Iterable<T> elements) {
+        for (T i : elements) {
+            if (!checkIdentity(i))
+                throw new GroupException("identity check failed");
+
+            if (!checkInverse(i))
+                throw new GroupException("inverse check failed");
+
+            for (T j : elements) {
+                if (!checkClosure(i, j))
+                    throw new GroupException("closure check failed");
+
+                if (!checkCommutativity(i, j))
+                    throw new GroupException("commutativity check failed");
+
+                for (T k : elements) {
+                    if (!checkAssociativity(i, j, k))
+                        throw new GroupException("associativity check failed");
+                }
+            }
+        }
+        return true;
+    }
 }

@@ -1,4 +1,4 @@
-package org.stardust.math;
+package org.stardust.math.field;
 
 /**
  * Created with IntelliJ IDEA.

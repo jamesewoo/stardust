@@ -3,6 +3,7 @@ package org.stardust.math.group;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 import static java.math.BigInteger.*;
 import static org.junit.Assert.assertEquals;
@@ -70,18 +71,8 @@ public class IntegersModNTest {
     public void testGroupProperties() {
         IntegersModN zModN = new IntegersModN(3);
         AbelianGroupVerifier<BigInteger> verifier = new AbelianGroupVerifier<>(zModN);
-        int[] elements = new int[]{0, 1, 2};
+        Iterable<BigInteger> elements = Arrays.asList(ZERO, ONE, valueOf(2));
 
-        for (int i : elements) {
-            assertTrue(verifier.checkIdentity(valueOf(i)));
-            assertTrue(verifier.checkInverse(valueOf(i)));
-            for (int j : elements) {
-                assertTrue(verifier.checkClosure(valueOf(i), valueOf(j)));
-                assertTrue(verifier.checkCommutativity(valueOf(i), valueOf(j)));
-                for (int k : elements) {
-                    assertTrue(verifier.checkAssociativity(valueOf(i), valueOf(j), valueOf(k)));
-                }
-            }
-        }
+        assertTrue(verifier.verifyAll(elements));
     }
 }
