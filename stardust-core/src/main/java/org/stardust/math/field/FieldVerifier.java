@@ -1,7 +1,4 @@
-package orF.stardust.math.field;
-
-import org.stardust.math.field.Field;
-import org.stardust.math.field.FieldException;
+package org.stardust.math.field;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +8,7 @@ import org.stardust.math.field.FieldException;
  */
 public class FieldVerifier<T> {
 
-    private Field<T> F;
+    private final Field<T> F;
 
     public FieldVerifier(Field<T> field) {
         this.F = field;
