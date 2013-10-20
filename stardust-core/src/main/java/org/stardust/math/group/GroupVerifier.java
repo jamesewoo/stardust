@@ -46,7 +46,8 @@ public class GroupVerifier<T> {
         if (G.contains(a)) {
             T aInv = G.getInverse(a);
             T e = G.getIdentity();
-            return e.equals(G.operate(a, aInv)) &&
+            return G.contains(aInv)
+                    && e.equals(G.operate(a, aInv)) &&
                     e.equals(G.operate(aInv, a));
         } else {
             throw new GroupException("a must be an element of G");

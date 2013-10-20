@@ -6,7 +6,7 @@ import static java.math.BigInteger.ONE;
 import static java.math.BigInteger.valueOf;
 
 /**
- * Created with IntelliJ IDEA.
+ * The group of units modulo n under multiplication of congruence classes.
  * User: evadrone
  * Date: 10/19/13
  * Time: 12:07 PM

@@ -6,7 +6,7 @@ import static java.math.BigInteger.ZERO;
 import static java.math.BigInteger.valueOf;
 
 /**
- * Created with IntelliJ IDEA.
+ * The group of integers modulo n under addition of congruence classes.
  * User: evadrone
  * Date: 10/18/13
  * Time: 9:21 PM
@@ -56,7 +56,7 @@ public class IntegersModN implements Group<BigInteger> {
 
     @Override
     public BigInteger getInverse(BigInteger a) {
-        return a.negate();
+        return a.negate().mod(modulus);
     }
 
     @Override
