@@ -1,8 +1,8 @@
 package org.stardust.math.ec;
 
-import org.stardust.math.field.FiniteField;
 import org.stardust.math.coords.AffineCoordinates;
 import org.stardust.math.coords.ProjectiveCoordinates;
+import org.stardust.math.field.IntegersModP;
 
 import java.math.BigInteger;
 
@@ -17,14 +17,14 @@ public class AffineECGroup extends ECGroup<AffineCoordinates> {
 
     private final ECParameters params;
 
-    private final FiniteField field;
+    private final IntegersModP field;
 
     public AffineECGroup(ECParameters params) throws EllipticCurveException {
         super(params);
         if (params.getP().compareTo(val(3)) <= 0)
             throw new IllegalArgumentException("field characteristic cannot be less than or equal to 3");
         this.params = params;
-        this.field = new FiniteField(params.getP());
+        this.field = new IntegersModP(params.getP());
         if (field.isCongruent(getDiscriminant(), BigInteger.ZERO))
             throw new EllipticCurveException("invalid discriminant");
     }

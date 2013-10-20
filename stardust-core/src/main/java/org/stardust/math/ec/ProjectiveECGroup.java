@@ -1,8 +1,8 @@
 package org.stardust.math.ec;
 
-import org.stardust.math.field.FiniteField;
 import org.stardust.math.coords.AffineCoordinates;
 import org.stardust.math.coords.ProjectiveCoordinates;
+import org.stardust.math.field.IntegersModP;
 
 import java.math.BigInteger;
 
@@ -16,7 +16,7 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
     public static final ProjectiveCoordinates POINT_AT_INFINITY = new ProjectiveCoordinates(1, 1, 0);
 
     private final ECParameters params;
-    private final FiniteField field;
+    private final IntegersModP field;
 
     /**
      * Creates a new elliptic curve using projective coordinates.
@@ -29,7 +29,7 @@ public class ProjectiveECGroup extends ECGroup<ProjectiveCoordinates> {
         if (params.getP().compareTo(val(3)) <= 0)
             throw new IllegalArgumentException("field characteristic cannot be less than or equal to 3");
         this.params = params;
-        this.field = new FiniteField(params.getP());
+        this.field = new IntegersModP(params.getP());
         if (field.isCongruent(getDiscriminant(), BigInteger.ZERO))
             throw new EllipticCurveException("invalid discriminant");
     }

@@ -20,6 +20,6 @@ public interface Field<T> {
 
     public T getMultiplicativeInverse(T a);
 
-    public boolean isElement(T a);
+    public boolean contains(T a);
 
 }
