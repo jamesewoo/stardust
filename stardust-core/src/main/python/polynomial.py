@@ -53,4 +53,4 @@ def taylor(coeffs):
         deriv_list.append(cur)
         cur = diff(cur)
     #print("Derivatives:", list(enumerate(deriv_list)))
-    return lambda x: [(poly(p))(x) / math.factorial(n) for (n, p) in list(enumerate(deriv_list))]
+    return lambda c: [(poly(p))(c) / math.factorial(n) for (n, p) in list(enumerate(deriv_list))]
