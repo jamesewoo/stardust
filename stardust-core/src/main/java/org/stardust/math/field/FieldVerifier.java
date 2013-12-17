@@ -52,8 +52,8 @@ public class FieldVerifier<T> {
 
     public boolean checkAdditiveIdentity(T a) {
         if (F.contains(a)) {
-            T zero = F.getAdditiveIdentity();
-            T one = F.getMultiplicativeIdentity();
+            T zero = F.zero();
+            T one = F.one();
             return F.contains(zero)
                     && !zero.equals(one)
                     && a.equals(F.add(zero, a))
@@ -65,8 +65,8 @@ public class FieldVerifier<T> {
 
     public boolean checkMultiplicativeIdentity(T a) {
         if (F.contains(a)) {
-            T zero = F.getAdditiveIdentity();
-            T one = F.getMultiplicativeIdentity();
+            T zero = F.zero();
+            T one = F.one();
             return F.contains(one)
                     && !zero.equals(one)
                     && a.equals(F.multiply(one, a))
@@ -78,7 +78,7 @@ public class FieldVerifier<T> {
 
     public boolean checkAdditiveInverse(T a) {
         if (F.contains(a)) {
-            T zero = F.getAdditiveIdentity();
+            T zero = F.zero();
             T minusA = F.getAdditiveInverse(a);
             return F.contains(minusA)
                     && zero.equals(F.add(a, minusA))
@@ -89,9 +89,9 @@ public class FieldVerifier<T> {
     }
 
     public boolean checkMultiplicativeInverse(T a) {
-        T zero = F.getAdditiveIdentity();
+        T zero = F.zero();
         if (!zero.equals(a) && F.contains(a)) {
-            T one = F.getMultiplicativeIdentity();
+            T one = F.one();
             T aInv = F.getMultiplicativeInverse(a);
             return F.contains(aInv)
                     && one.equals(F.multiply(a, aInv))
@@ -99,6 +99,46 @@ public class FieldVerifier<T> {
         } else {
             throw new FieldException("a must be a nonzero element of F");
         }
+    }
+
+    /**
+     * Verifies that all field properties hold for the given elements.  Skips the multiplicative inverse check for the
+     * zero element.
+     *
+     * @param elements the elements to verify
+     * @return true if the field properties hold for the given elements; exception otherwise
+     */
+    public boolean verifyAll(Iterable<T> elements) {
+        for (T i : elements) {
+            if (!checkAdditiveIdentity(i))
+                throw new FieldException("additive identity check failed");
+
+            if (!checkMultiplicativeIdentity(i))
+                throw new FieldException("multiplicative identity check failed");
+
+            if (!checkAdditiveInverse(i))
+                throw new FieldException("additive inverse check failed");
+
+            if (!F.zero().equals(i) && !checkMultiplicativeInverse(i))
+                throw new FieldException("multiplicative inverse check failed");
+
+            for (T j : elements) {
+                if (!checkClosure(i, j))
+                    throw new FieldException("closure check failed");
+
+                if (!checkCommutativity(i, j))
+                    throw new FieldException("commutativity check failed");
+
+                for (T k : elements) {
+                    if (!checkAssociativity(i, j, k))
+                        throw new FieldException("associativity check failed");
+
+                    if (!checkDistributivity(i, j, k))
+                        throw new FieldException("distributivity check failed");
+                }
+            }
+        }
+        return true;
     }
 
 }

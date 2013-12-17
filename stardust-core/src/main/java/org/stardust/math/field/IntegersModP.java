@@ -4,12 +4,19 @@ import org.stardust.math.ModMath;
 
 import java.math.BigInteger;
 
+import static java.math.BigInteger.valueOf;
+
 /**
  * A finite field with prime characteristic.
  */
 public class IntegersModP implements Field<BigInteger> {
 
     private final BigInteger p;
+    private int primeCertainty = 100;
+
+    public IntegersModP(Integer p) {
+        this(valueOf(p));
+    }
 
     /**
      * Creates a finite field with prime characteristic p.
@@ -17,7 +24,17 @@ public class IntegersModP implements Field<BigInteger> {
      * @param p the characteristic
      */
     public IntegersModP(BigInteger p) {
+        if (!p.isProbablePrime(primeCertainty))
+            throw new FieldException("field characteristic must be prime");
         this.p = p;
+    }
+
+    public int getPrimeCertainty() {
+        return primeCertainty;
+    }
+
+    public void setPrimeCertainty(int primeCertainty) {
+        this.primeCertainty = primeCertainty;
     }
 
     /**
@@ -31,6 +48,10 @@ public class IntegersModP implements Field<BigInteger> {
         return ModMath.isElement(x, p);
     }
 
+    public BigInteger add(Integer x, Integer y) {
+        return add(valueOf(x), valueOf(y));
+    }
+
     /**
      * Returns x + y mod p
      *
@@ -41,6 +62,10 @@ public class IntegersModP implements Field<BigInteger> {
     @Override
     public BigInteger add(BigInteger x, BigInteger y) {
         return ModMath.add(x, y, p);
+    }
+
+    public BigInteger multiply(Integer x, Integer y) {
+        return multiply(valueOf(x), valueOf(y));
     }
 
     /**
@@ -56,12 +81,12 @@ public class IntegersModP implements Field<BigInteger> {
     }
 
     @Override
-    public BigInteger getAdditiveIdentity() {
+    public BigInteger zero() {
         return BigInteger.ZERO;
     }
 
     @Override
-    public BigInteger getMultiplicativeIdentity() {
+    public BigInteger one() {
         return BigInteger.ONE;
     }
 

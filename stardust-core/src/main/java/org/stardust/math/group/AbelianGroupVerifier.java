@@ -23,6 +23,7 @@ public class AbelianGroupVerifier<T> extends GroupVerifier<T> {
         }
     }
 
+    @Override
     public boolean verifyAll(Iterable<T> elements) {
         for (T i : elements) {
             if (!checkIdentity(i))

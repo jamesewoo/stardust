@@ -12,9 +12,19 @@ public interface Field<T> {
 
     public T multiply(T a, T b);
 
-    public T getAdditiveIdentity();
+    /**
+     * Returns the zero element, or the additive identity.
+     *
+     * @return the zero element
+     */
+    public T zero();
 
-    public T getMultiplicativeIdentity();
+    /**
+     * Returns one, or the multiplicative identity.
+     *
+     * @return the multiplicative identity
+     */
+    public T one();
 
     public T getAdditiveInverse(T a);
 
